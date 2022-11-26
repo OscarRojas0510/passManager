@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/mnu_user"
+        android:icon="@drawable/ic_user_info"
+        android:onClick="userinf"
+        android:title="usuario"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mnu_buscar"
+        android:icon="@drawable/ic_busca"
+        android:onClick="buscar"
+        android:title="Buscar"
+        app:showAsAction="ifRoom" />
+    <item android:title="" />
+    <item
+        android:id="@+id/mnu_logout"
+        android:icon="@drawable/ic_logout"
+        android:onClick="logout"
+        android:title="Logout"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mnu_pass_gen"
+        android:icon="@drawable/ic_pass_gen"
+        android:onClick="passGen"
+        android:title="generar"
+        app:showAsAction="ifRoom" />
+</menu>

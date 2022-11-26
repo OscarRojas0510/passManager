@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/dialog_pers2_linearlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custom_back_design_1"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/busca_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="@android:color/transparent"
+            android:src="@drawable/ic_dialog_close_1" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dialog_busca_cuenta_textilResp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:elevation="5dp"
+            android:hint="Respuesta"
+            android:textColorHint="@color/white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxStrokeColor="@color/white"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/white"
+            app:helperText="Cuida el uso de Mayuscúlas y minúsculas"
+            app:helperTextTextColor="@color/white"
+            app:hintTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/busca_cuenta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/busca_ok"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/deg"
+                android:backgroundTintMode="screen"
+                android:elevation="5dp"
+                android:importantForAutofill="auto"
+                android:maxLines="1"
+                android:text="Buscar"
+                android:textColor="@color/black"
+                app:cornerRadius="100dp"
+                app:icon="@drawable/ic_check"
+                app:iconGravity="start"
+                app:iconTint="@color/inversoDeg" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/custom_bg_design_2"
+        android:elevation="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_search"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_pers2_linearlay"
+        app:layout_constraintStart_toStartOf="@+id/dialog_pers2_linearlay"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="naranja_F24B0F">#F24B0F</color>
+    <color name="naranja_BF471B">#BF471B</color>
+    <color name="cafe_8C4C35">#8C4C35</color>
+    <color name="gris_8C8C8C">#8C8C8C</color>
+    <color name="negro_0D0D0D">#0D0D0D</color>
+    <color name="verde_0ff248">#0ff248</color>
+    <color name="verde_1bbf47">#1bbf47</color>
+    <color name="red">#ff0000</color>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#2d5985</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="deg">#47F2CE</color>
+    <color name="degDos">#34B297</color>
+    <color name="degTres">#164D41</color>
+
+    <color name="coloFondo">#26394C</color>
+
+    <color name="ColorLogin">#05BD67</color>
+
+    <color name="colorTexto">#16CD1F</color>
+    <color name="colorHint">#33ED96</color>
+
+    <color name="colorBoton">#52842f</color>
+    <color name="ColorTextoBoton">#D0ED8D</color>
+
+    <color name="inversoDeg">#f2476c</color>
+    <color name="inversoDegdos">#b2344f</color>
+    <color name="inversoDegTres">#4d1623</color>
+    <color name="Rojo">#FF0000</color>
+
+
+    <color name="alarma_1">#978300</color>
+    <color name="alarma_2">#ccb100</color>
+    <color name="alarma_3">#ffdd00</color>
+    <color name="alarma_4">#990000</color>
+    <color name="alarma_5">#cc0000</color>
+    <color name="verde_brillante">#66ff00</color>
+
+
+</resources>

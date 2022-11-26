@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SplashScreen</string>
+    <string name="iniciar_sesion">Iniciar Sesion</string>
+    <string name="todo">TODO</string>
+    <string name="correo">Correo</string>
+    <string name="contrase_a">Contraseña</string>
+    <string name="iniciar_sesion_1">Iniciar Sesion</string>
+    <string name="resgistrarse">Resgistrarse</string>
+    <string name="olvid_mi_contrase_a">Olvidé mi contraseña</string>
+</resources>

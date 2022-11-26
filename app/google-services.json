@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "977601422811",
+    "project_id": "passmanager-4d5df",
+    "storage_bucket": "passmanager-4d5df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977601422811:android:0a9cd8489c7477e99873fe",
+        "android_client_info": {
+          "package_name": "com.example.splashscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977601422811-1l80jrgftddfghhdrsbnj9ih74p3tf1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.splashscreen",
+            "certificate_hash": "e2b2edaaca4f1139527cb2355efc4b41629196b8"
+          }
+        },
+        {
+          "client_id": "977601422811-2k2hfms0gee80qptr6t24qlmjiq7h2h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBev0wbxCqOXXK_U6pGZLUSWvT-NSKZmfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977601422811-2k2hfms0gee80qptr6t24qlmjiq7h2h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
