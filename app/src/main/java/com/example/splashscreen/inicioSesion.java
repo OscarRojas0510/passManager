@@ -171,7 +171,7 @@ public class inicioSesion extends AppCompatActivity
             //toastIncorrecto("Error al Buscar");
         } else
         {
-            Cursor fila = bdd.rawQuery("select email, password from datos where codigo = " + codigo, null);
+            Cursor fila = bdd.rawQuery("select email, password from datos_almacenados where codigo = " + codigo, null);
             if (fila.moveToFirst())
             {
                 user.setText(fila.getString(0));

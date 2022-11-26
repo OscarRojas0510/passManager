@@ -233,20 +233,23 @@
             android:layout_marginTop="20dp" />
         <Constraint
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/button"
             android:id="@+id/tvContrasenia"
-            android:layout_marginEnd="10dp" />
+            app:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:id="@+id/tvRegistro"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvContrasenia"
-            app:layout_constraintVertical_bias="0.072"
-            app:layout_editor_absoluteX="107dp" />
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="92dp"
+            android:layout_marginStart="92dp" />
         <Constraint
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -255,12 +258,15 @@
             app:layout_editor_absoluteX="147dp" />
         <Constraint
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvRegistro"
             android:id="@+id/tvRegistro_1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvRegistro"
+            app:layout_constraintTop_toBottomOf="@+id/tvContrasenia"
+            android:layout_marginTop="16dp"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="1dp" />
 
         <Constraint
             android:id="@+id/sRecordar"
