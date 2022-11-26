@@ -32,7 +32,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     private String id;
 
 
-    private Button salir, cancelar, save, back, edit;
+    private Button cancel, save, back, edit;
 
     EditText correoUser, user, password, confPassword, res, pin, quest;
     String correoUserDB, userDB, passwordDB, resDB, pinDB, questDB, nivelDB;
@@ -63,9 +63,9 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         save = this.findViewById(R.id.save);
         back = this.findViewById(R.id.backAct);
         edit = this.findViewById(R.id.edit);
-
+        cancel=this.findViewById(R.id.cancel);
         edit.setOnClickListener(this);
-        //cancelar.setOnClickListener(this);
+        cancel.setOnClickListener(this);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
     }
@@ -159,22 +159,24 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void onClick(View v)
+    public void onClick(@NonNull View v)
     {
         switch (v.getId())
         {
             case R.id.backAct:
-                Intent i = new Intent(DatosUsuario.this, inicioSesion.class);
+                Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
+                i.putExtra("key",id);
                 startActivity(i);
-                //finish();
+                finish();
                 break;
             case R.id.cancel:
-                datosUsuario(v);
+                editBox(false);
                 break;
             case R.id.edit:
-                changeDataUser(v);
+                editBox(true);
                 break;
             case R.id.save:
+                changeDataUser(v);
                 break;
         }
     }

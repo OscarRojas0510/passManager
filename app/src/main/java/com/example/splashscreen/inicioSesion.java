@@ -147,7 +147,7 @@ public class inicioSesion extends AppCompatActivity
             registro.put("email", email);
             registro.put("password", con);
 
-            bdd.insert("datos", null, registro);
+            bdd.insert("datos_almacenados", null, registro);
 
             bdd.close();
 
