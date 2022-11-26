@@ -190,7 +190,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                     String userAdd = user.getText().toString();
                     String passwordAdd = password.getText().toString();
                     String resAdd = res.getText().toString();
-                    String questAdd = res.getText().toString();
+                    String questAdd = quest.getText().toString();
                     int pinAdd = Integer.parseInt(pin.getText().toString());
                     if (validaCorreo() && validaPassword())
                     {
