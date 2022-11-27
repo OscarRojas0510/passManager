@@ -44,7 +44,7 @@ import com.google.firebase.storage.StorageReference;
 public class DatosUsuario extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener
 {
 
-    private String id,oldpass;
+    private String id, oldpass;
     AutoCompleteTextView autoCompleteTextView;
     FirebaseAuth auth;
     private Button cancel, save, back, edit;
@@ -82,7 +82,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         save = this.findViewById(R.id.save);
         back = this.findViewById(R.id.backAct);
         edit = this.findViewById(R.id.edit);
-        cancel=this.findViewById(R.id.cancel);
+        cancel = this.findViewById(R.id.cancel);
         edit.setOnClickListener(this);
         cancel.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -142,7 +142,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                             questDB = userTemp[0].getPregunta();
                             resDB = userTemp[0].getRespuesta();
                             pinDB = userTemp[0].getPin() + "";
-                            oldpass=passwordDB;
+                            oldpass = passwordDB;
                             //nivelDB = "" + userTemp[0].isCuenta_empresarial();
 
                             // img = cursor.getString(9);
@@ -174,7 +174,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.backAct:
                 Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
-                i.putExtra("key",id);
+                i.putExtra("key", id);
                 startActivity(i);
                 finish();
                 break;
@@ -190,10 +190,12 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void editBox(boolean show){
+    public void editBox(boolean show)
+    {
         editor = findViewById(R.id.editor);
         navAct = findViewById(R.id.navAct);
-        if (show) {
+        if (show)
+        {
             String type[] =
                     {
                             "Cuál es el primer apellido de tu madre?",
@@ -228,8 +230,8 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             confPass.setVisibility(View.VISIBLE);
             navAct.setVisibility(View.GONE);
             editor.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else
+        {
             getUserDB();
             user.setEnabled(false);
             password.setEnabled(false);
@@ -242,18 +244,21 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void preguntaClick(AdapterView<?> parent, View view, int position, long id){
+    public void preguntaClick(AdapterView<?> parent, View view, int position, long id)
+    {
         Toast.makeText(this, autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
-    private void iniciaFirebase(){
+    private void iniciaFirebase()
+    {
         FirebaseApp.initializeApp(this);
         firebaseDataBase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDataBase.getReference();
         mstorage = FirebaseStorage.getInstance().getReference();
     }
 
-    private void changeDataUser(View v){
+    private void changeDataUser(View v)
+    {
         if (
                 correoUser.getText().toString().equals("") ||
                         user.getText().toString().equals("") ||
@@ -276,27 +281,41 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             int pinAdd = Integer.parseInt(pin.getText().toString());
             if (validaPassword())
             {
-                AuthCredential credential = EmailAuthProvider.getCredential(correoAdd,oldpass);
-                auth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                AuthCredential credential = EmailAuthProvider.getCredential(correoAdd, oldpass);
+                auth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>()
+                            {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
+                                public void onComplete(@NonNull Task<Void> task)
+                                {
+                                    if (task.isSuccessful())
+                                    {
                                         databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
                                         databaseReference.child("usuarios").child(id).child("contrasenia").setValue(passwordAdd);
                                         databaseReference.child("usuarios").child(id).child("pin").setValue(pinAdd);
                                         databaseReference.child("usuarios").child(id).child("pregunta").setValue(questAdd);
                                         databaseReference.child("usuarios").child(id).child("respuesta").setValue(resAdd);
                                         Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();
-                                    } else {
+                                    } else
+                                    {
                                         Toast.makeText(DatosUsuario.this, "Algo malo paso", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         }
+                    }
+                }).addOnFailureListener(new OnFailureListener()
+                {
+                    @Override
+                    public void onFailure(@NonNull Exception e)
+                    {
+                        Toast.makeText(DatosUsuario.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 });
                 cancel.performClick();
