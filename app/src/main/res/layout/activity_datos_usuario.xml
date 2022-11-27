@@ -3,19 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/fondo_login"
     tools:context=".DatosUsuario">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
 
             <ImageView
                 android:layout_width="300px"
@@ -38,16 +43,16 @@
                 app:boxStrokeColor="@color/verde_0ff248"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/white"
-                app:hintTextColor="@color/verde_0ff248"
-                app:helperTextTextColor="@color/red">
+                app:helperTextTextColor="@color/red"
+                app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/datos_users_correoUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:enabled="false"
                     android:inputType="textEmailAddress"
-                    android:enabled="false"/>
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -71,8 +76,8 @@
                     android:id="@+id/nameUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -96,13 +101,13 @@
                     android:id="@+id/passUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:inputType="textPassword"
-                    android:textColor="@color/white"
-                    android:enabled="false"/>
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confPaswordUser"
+                android:id="@+id/confPasswordUserBox"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,15 +115,15 @@
                 android:elevation="5dp"
                 android:hint="Confirma contraseña"
                 android:textColorHint="@color/verde_0ff248"
+                android:visibility="gone"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
                 app:boxStrokeColor="@color/verde_0ff248"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/white"
-                app:hintTextColor="@color/verde_0ff248"
                 app:helperTextTextColor="@color/red"
-                android:visibility="gone">
+                app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/confPassUser"
@@ -149,9 +154,9 @@
                     android:id="@+id/pinUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:inputType="numberPassword"
-                    android:textColor="@color/white"
-                    android:enabled="false"/>
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -173,9 +178,8 @@
                     android:id="@+id/preguntaUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:enabled="false">
-                </AutoCompleteTextView>
+                    android:enabled="false"
+                    android:inputType="none"></AutoCompleteTextView>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -199,8 +203,8 @@
                     android:id="@+id/respPreguntaUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -208,6 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/backAct"
                     android:layout_width="match_parent"
@@ -215,8 +220,8 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
-                    android:text="Volver">
-                </Button>
+                    android:text="Volver"></Button>
+
                 <Button
                     android:id="@+id/edit"
                     android:layout_width="match_parent"
@@ -224,8 +229,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
-                    android:text="Editar">
-                </Button>
+                    android:text="Editar"></Button>
             </LinearLayout>
 
             <LinearLayout
@@ -234,6 +238,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="gone">
+
                 <Button
                     android:id="@+id/cancel"
                     android:layout_width="match_parent"

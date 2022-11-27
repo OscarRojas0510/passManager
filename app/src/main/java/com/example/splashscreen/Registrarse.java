@@ -1,5 +1,7 @@
 package com.example.splashscreen;
 
+import static com.example.splashscreen.EncriptarTexto.encriptar;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -75,14 +77,6 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
 
         autoCompleteTextView = findViewById(R.id.regPregunta);
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                preguntaClick(parent, view, position, id);
-            }
-        });
         componentes();
     }
 
@@ -93,12 +87,12 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         EditTextComponentes();
     }
 
-    public void preguntaClick(AdapterView<?> parent, View view, int position, long id)
+    /*public void preguntaClick(AdapterView<?> parent, View view, int position, long id)
     {
         Toast.makeText(this, autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
-    public void registro()
+    public void registro(Usuarios userNew)
     {
         String corr = correo.getText().toString().trim();
         String passw = pass.getText().toString().trim();
@@ -107,6 +101,8 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onSuccess(AuthResult authResult)
             {
+                databaseReference.child("usuarios").child(userNew.getId()).setValue(userNew);
+                cancelar.performClick();
                 Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener()
@@ -114,6 +110,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onFailure(@NonNull Exception e)
             {
+                limpiar();
                 Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
@@ -188,17 +185,14 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                     String idAdd = ("" + auto);
                     String correoAdd = correoUser.getText().toString();
                     String userAdd = user.getText().toString();
-                    String passwordAdd = password.getText().toString();
+                    String passwordAdd = encriptar(password.getText().toString());
                     String resAdd = res.getText().toString();
                     String questAdd = quest.getText().toString();
                     int pinAdd = Integer.parseInt(pin.getText().toString());
                     if (validaCorreo() && validaPassword())
                     {
                         Usuarios userNew = new Usuarios(idAdd, correoAdd, passwordAdd, userAdd, questAdd, resAdd, pinAdd, false);
-                        databaseReference.child("usuarios").child(userNew.getId()).setValue(userNew);
-                        registro();
-                        limpiar();
-                        Toast.makeText(this, "Usuario ha sido agregado con exito", Toast.LENGTH_SHORT).show();
+                        registro( userNew);
                     } else
                     {
                         Toast.makeText(v.getContext(), "Complete los campos", Toast.LENGTH_LONG).show();

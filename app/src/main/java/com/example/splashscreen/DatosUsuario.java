@@ -1,5 +1,8 @@
 package com.example.splashscreen;
 
+import static com.example.splashscreen.EncriptarTexto.desencriptar;
+import static com.example.splashscreen.EncriptarTexto.encriptar;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,28 +13,40 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class DatosUsuario extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener
 {
 
-    private String id;
-
-
+    private String id,oldpass;
+    AutoCompleteTextView autoCompleteTextView;
+    FirebaseAuth auth;
     private Button cancel, save, back, edit;
 
     EditText correoUser, user, password, confPassword, res, pin, quest;
@@ -39,23 +54,27 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     TextInputLayout confPass, confEmail;
     LinearLayout editor, navAct;
 
+    static String URLfoto = "";
+    FirebaseDatabase firebaseDataBase;
+    DatabaseReference databaseReference;
+
+    private StorageReference mstorage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_usuario);
-        EditTextComponentes();
-        BotonesComponentes();
+        componentes();
         id = getIntent().getStringExtra("key");
         getUserDB();
     }
 
-    public void datosUsuario(View v)
+    private void componentes()
     {
-    }
-
-    private void iniciaFirebase()
-    {
+        BotonesComponentes();
+        iniciaFirebase();
+        EditTextComponentes();
     }
 
     private void BotonesComponentes()
@@ -81,7 +100,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         res = this.findViewById(R.id.respPreguntaUser);
 
 
-        confPass = this.findViewById(R.id.confPaswordUser);
+        confPass = this.findViewById(R.id.confPasswordUserBox);
         confEmail = this.findViewById(R.id.correoUserBox);
 
 
@@ -93,17 +112,6 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                 if (!hasFocus)
                 {
                     validaPassword();
-                }
-            }
-        });
-        correoUser.setOnFocusChangeListener(new View.OnFocusChangeListener()
-        {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus)
-            {
-                if (!hasFocus)
-                {
-                    validaCorreo();
                 }
             }
         });
@@ -129,11 +137,12 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                         if (userTemp[0].getId().equals(id))
                         {
                             correoUserDB = userTemp[0].getCorreo();
-                            passwordDB = userTemp[0].getContrasenia();
+                            passwordDB = desencriptar(userTemp[0].getContrasenia());
                             userDB = userTemp[0].getNombre();
                             questDB = userTemp[0].getPregunta();
                             resDB = userTemp[0].getRespuesta();
                             pinDB = userTemp[0].getPin() + "";
+                            oldpass=passwordDB;
                             //nivelDB = "" + userTemp[0].isCuenta_empresarial();
 
                             // img = cursor.getString(9);
@@ -181,39 +190,120 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void editBox(boolean show)
-    {
+    public void editBox(boolean show){
         editor = findViewById(R.id.editor);
         navAct = findViewById(R.id.navAct);
-        if (show)
-        {
+        if (show) {
+            String type[] =
+                    {
+                            "Cuál es el primer apellido de tu madre?",
+                            "Cuál es el nombre de tu mascota?",
+                            "Cuál es tu apodo?",
+                            "Cuál es el nombre de tu escuela primaria?",
+                            "Cuál es el nombre de tu escuela secundaria?",
+                            "Cuál es el nombre de tu escuela preparatoria?",
+                            "Cuál es el nombre de tu universidad?",
+                            "Cuál es el nombre de tu artista favorito?"
+                    };
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this,
+                    R.layout.drop_down_item,
+                    type
+            );
+            autoCompleteTextView = findViewById(R.id.preguntaUser);
+            autoCompleteTextView.setAdapter(adapter);
+            autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    preguntaClick(parent, view, position, id);
+                }
+            });
+            user.setEnabled(true);
+            password.setEnabled(true);
+            pin.setEnabled(true);
+            quest.setEnabled(true);
+            res.setEnabled(true);
+            confPass.setVisibility(View.VISIBLE);
             navAct.setVisibility(View.GONE);
             editor.setVisibility(View.VISIBLE);
-        } else
-        {
+        }
+        else {
+            getUserDB();
+            user.setEnabled(false);
+            password.setEnabled(false);
+            pin.setEnabled(false);
+            quest.setEnabled(false);
+            res.setEnabled(false);
+            confPass.setVisibility(View.GONE);
             editor.setVisibility(View.GONE);
             navAct.setVisibility(View.VISIBLE);
         }
-
     }
 
-    private void changeDataUser(View v)
-    {
+    public void preguntaClick(AdapterView<?> parent, View view, int position, long id){
+        Toast.makeText(this, autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
+    private void iniciaFirebase(){
+        FirebaseApp.initializeApp(this);
+        firebaseDataBase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDataBase.getReference();
+        mstorage = FirebaseStorage.getInstance().getReference();
+    }
 
-    public boolean validaCorreo()
-    {
-        if (correoUser.toString().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(correoUser.getText().toString().trim()).matches())
+    private void changeDataUser(View v){
+        if (
+                correoUser.getText().toString().equals("") ||
+                        user.getText().toString().equals("") ||
+                        password.getText().toString().equals("") ||
+                        pin.getText().toString().equals("") ||
+                        res.getText().toString().equals("")
+        )
         {
-            confEmail.setHelperTextEnabled(true);
-            confEmail.setHelperText("Correo no valido");
-            return false;
+            Toast.makeText(v.getContext(), "Complete los campos", Toast.LENGTH_LONG).show();
+
         } else
         {
-            confEmail.setHelperText("");
-            confEmail.setHelperTextEnabled(false);
-            return true;
+            auth = FirebaseAuth.getInstance();
+            String idAdd = id;
+            String correoAdd = correoUser.getText().toString();
+            String userAdd = user.getText().toString();
+            String passwordAdd = encriptar(password.getText().toString());
+            String resAdd = res.getText().toString();
+            String questAdd = quest.getText().toString();
+            int pinAdd = Integer.parseInt(pin.getText().toString());
+            if (validaPassword())
+            {
+                AuthCredential credential = EmailAuthProvider.getCredential(correoAdd,oldpass);
+                auth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
+                                        databaseReference.child("usuarios").child(id).child("contrasenia").setValue(passwordAdd);
+                                        databaseReference.child("usuarios").child(id).child("pin").setValue(pinAdd);
+                                        databaseReference.child("usuarios").child(id).child("pregunta").setValue(questAdd);
+                                        databaseReference.child("usuarios").child(id).child("respuesta").setValue(resAdd);
+                                        Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(DatosUsuario.this, "Algo malo paso", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                cancel.performClick();
+            } else
+            {
+                Toast.makeText(v.getContext(), "Complete los campos", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
