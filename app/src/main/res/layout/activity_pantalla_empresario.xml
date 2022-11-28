@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_login"
+    android:fitsSystemWindows="true"
+    tools:context=".PantallaEmpresario">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="50dp"
+        android:fitsSystemWindows="false"
+        android:gravity="fill"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_weight="0"
+            android:elevation="30dp"
+            android:text="Empresarial"
+            android:textAlignment="center"
+            android:textSize="25sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/inicioEmp_Recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:layout_weight="1"
+            android:elevation="15dp"
+            tools:layout_editor_absoluteX="14dp"
+            tools:layout_editor_absoluteY="184dp" />
+    </LinearLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/inicioEmp_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/deg2"
+        android:backgroundTint="@color/inversoDeg"
+        android:fitsSystemWindows="false"
+        android:isScrollContainer="false"
+        app:fabAlignmentMode="center"
+        app:fabAnimationMode="scale"
+        app:fabCradleMargin="5dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="0dp"
+        app:hideOnScroll="true"
+        app:removeEmbeddedFabElevation="true">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomEmp_nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:fitsSystemWindows="false"
+            android:isScrollContainer="false"
+            app:itemIconTint="@color/deg"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottomm_mnu_emp" />
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/inversoDeg"
+        android:isScrollContainer="false"
+        android:onClick="add"
+        android:src="@drawable/ic_add"
+        app:fabSize="mini"
+        app:layout_anchor="@id/inicioEmp_bottom_bar"
+        app:layout_anchorGravity="bottom"
+        app:maxImageSize="25dp"
+        app:tint="@color/deg" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

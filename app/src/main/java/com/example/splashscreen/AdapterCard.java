@@ -188,6 +188,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
                 .load(card.getImagenFireBase())
                 .resize(400, 500)
                 .into(holder.imageView);
+
     }
 
     @Override

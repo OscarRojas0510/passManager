@@ -72,7 +72,7 @@ public class ResetPassword extends AppCompatActivity
             passil.setError("");
             confil.setError("");
             auth = FirebaseAuth.getInstance();
-            auth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+            auth.signInWithEmailAndPassword(correo, EncriptarTexto.desencriptar(contrasenia)).addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
             {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task)
@@ -88,7 +88,7 @@ public class ResetPassword extends AppCompatActivity
                                 public void onSuccess(Void unused)
                                 {
                                     Map<String, Object> map = new HashMap<>();
-                                    map.put("contrasenia", password);
+                                    map.put("contrasenia", EncriptarTexto.encriptar(password));
                                     map.put("correo", correo);
                                     map.put("cuenta_empresarial", cuenta_empresarial);
                                     map.put("nombre", nombre);

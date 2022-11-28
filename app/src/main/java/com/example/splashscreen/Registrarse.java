@@ -103,11 +103,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         autoCompleteTextView = findViewById(R.id.regPregunta);
         autoCompleteTextView.setAdapter(adapter);
         userImage = findViewById(R.id.userImage);
-        BitmapDrawable drawable = (BitmapDrawable) userImage.getDrawable();
-        Bitmap thumbnail = drawable.getBitmap();
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        bb=bytes.toByteArray();
+        bb = null;
     }
 
     public void addPassTakePhoto(View view)
@@ -116,16 +112,19 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
         }
-            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startCamera.launch(i);
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startCamera.launch(i);
     }
 
     ActivityResultLauncher<Intent> startCamera = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<ActivityResult>()
+            {
                 @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+                public void onActivityResult(ActivityResult result)
+                {
+                    if (result.getResultCode() == Activity.RESULT_OK)
+                    {
                         Intent data = result.getData();
                         onCaptureResult(data);
                     }
@@ -146,61 +145,72 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
 
     public void registro()
     {
-        String corr = correo.getText().toString().trim();
-        String passw = pass.getText().toString().trim();
-        auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>()
+        if (bb != null)
         {
-            @Override
-            public void onSuccess(AuthResult authResult)
+            String corr = correo.getText().toString().trim();
+            String passw = pass.getText().toString().trim();
+            auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>()
             {
-                String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
-                @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
-                StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
-                sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                @Override
+                public void onSuccess(AuthResult authResult)
                 {
-                    imgurl = String.valueOf(uri);
-                    image=true;
+                    String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
+                    @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
+                    StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+                    sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                    {
+                        imgurl = String.valueOf(uri);
+                        image = true;
 
-                    if (image){
-                        userNew.setImg(imgurl);
-                        databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                cancelar.performClick();
-                                Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
-                                abrirInicioSesión();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+                        if (image)
+                        {
+                            userNew.setImg(imgurl);
+                            databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>()
+                            {
+                                @Override
+                                public void onSuccess(Void unused)
+                                {
+                                    cancelar.performClick();
+                                    Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
+                                    abrirInicioSesión();
+                                }
+                            }).addOnFailureListener(new OnFailureListener()
+                            {
+                                @Override
+                                public void onFailure(@NonNull Exception e)
+                                {
+                                    Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
 
-                }).addOnFailureListener(e ->
+                    }).addOnFailureListener(e ->
+                    {
+                        image = false;
+                        Toast.makeText(Registrarse.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }));
+                }
+            }).addOnFailureListener(new OnFailureListener()
+            {
+                @Override
+                public void onFailure(@NonNull Exception e)
                 {
-                    image=false;
-                    Toast.makeText(Registrarse.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
-                }));
-            }
-        }).addOnFailureListener(new OnFailureListener()
+                    limpiar();
+                    Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } else
         {
-            @Override
-            public void onFailure(@NonNull Exception e)
-            {
-                limpiar();
-                Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+            Toast.makeText(this, "debe tomar una foto primero", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void BotonesComponentes()
     {
         registrar = this.findViewById(R.id.mainBtnLogin);
         cancelar = this.findViewById(R.id.mainBtnSalir);
-        captImage=findViewById(R.id.upUserImage);
+        captImage = findViewById(R.id.upUserImage);
         registrar.setOnClickListener(this);
         cancelar.setOnClickListener(this);
         captImage.setOnClickListener(this);
@@ -272,7 +282,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                     int pinAdd = Integer.parseInt(pin.getText().toString());
                     if (validaCorreo() && validaPassword())
                     {
-                        userNew = new Usuarios(idAdd, correoAdd, passwordAdd, userAdd, questAdd, resAdd, pinAdd, false,imgurl);
+                        userNew = new Usuarios(idAdd, correoAdd, passwordAdd, userAdd, questAdd, resAdd, pinAdd, false, imgurl);
                         registro();
                     } else
                     {
@@ -281,7 +291,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
             case R.id.upUserImage:
-                Toast.makeText(v.getContext(),"Camera",Toast.LENGTH_SHORT);
+                Toast.makeText(v.getContext(), "Camera", Toast.LENGTH_SHORT);
                 addPassTakePhoto(v);
                 break;
         }
@@ -368,7 +378,8 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
 
     //Se debe colocar dentro del registra debido al jodido Firebase, que no permite llamadas masivas. o eso creo
     //solo sé que si la separo, esto falla
-    public void upUserImage(){
+    public void upUserImage()
+    {
         String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
@@ -376,10 +387,10 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
         {
             imgurl = String.valueOf(uri);
-            image=true;
+            image = true;
         }).addOnFailureListener(e ->
         {
-            image=false;
+            image = false;
             Toast.makeText(this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
         }));
     }

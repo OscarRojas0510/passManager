@@ -7,8 +7,10 @@
     android:background="@drawable/fondo_login"
     tools:context=".Registrarse">
 
+    <!--
+    okiteGAYmi estuvo aqui
+    -->
     <ScrollView
-
         android:layout_width="match_parent"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
