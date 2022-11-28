@@ -77,7 +77,7 @@ public class inicioSesion extends AppCompatActivity
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-
+                sw.setChecked(false);
             }
 
             @Override
@@ -97,7 +97,7 @@ public class inicioSesion extends AppCompatActivity
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
             {
-
+                sw.setChecked(false);
             }
 
             @Override
@@ -200,7 +200,7 @@ public class inicioSesion extends AppCompatActivity
             //toastIncorrecto("Error al Eliminar");
         } else
         {
-            int cantidad = bdd.delete("datos", "codigo = " + codigo, null);
+            int cantidad = bdd.delete("datos_almacenados", "codigo = " + codigo, null);
             bdd.close();
 
             if (cantidad == 1)
@@ -230,7 +230,14 @@ public class inicioSesion extends AppCompatActivity
     {
         Intent i = new Intent(inicioSesion.this, Registrarse.class);
         startActivity(i);
-        //finish();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finishAffinity();
     }
 
     public void olvidada(View view)
@@ -255,47 +262,57 @@ public class inicioSesion extends AppCompatActivity
                             String temp = db.getKey();
                             if (o[0].getCorreo().equals(user.getText().toString()))
                             {
-                                InputUser.setHelperText("");
-                                flag[0] = true;
-                                AlertDialog.Builder builder = new AlertDialog.Builder(inicioSesion.this);
-                                LayoutInflater inflater = getLayoutInflater();
-                                View v = inflater.inflate(R.layout.dialog_personalizado, null);
-                                builder.setView(v);
-                                AlertDialog dialog = builder.create();
-                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                dialog.show();
-                                ImageButton b = v.findViewById(R.id.olvido_cancel);
-                                b.setOnClickListener(v1 ->
+                                try
                                 {
-                                    dialog.dismiss();
-                                    CONTADOR_BTN_OLVIDO[0] = 0;
-                                });
-                                MaterialButton btnOk = v.findViewById(R.id.olvido_ok);
-                                EditText respuesta = v.findViewById(R.id.olvido_RespPregunta);
-                                TextInputLayout ilRespuesta = v.findViewById(R.id.dialog_olvido_textilResp);
-
-                                btnOk.setOnClickListener(new View.OnClickListener()
-                                {
-                                    @Override
-                                    public void onClick(View v)
+                                    InputUser.setHelperText("");
+                                    flag[0] = true;
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(inicioSesion.this);
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View v = inflater.inflate(R.layout.dialog_personalizado, null);
+                                    builder.setView(v);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    dialog.show();
+                                    dialog.setOnDismissListener(dialog1 ->
                                     {
-                                        if (o[0].getRespuesta().equals(respuesta.getText().toString()))
-                                        {
-                                            ilRespuesta.setHelperText("Respuesta correcta");
-                                            ilRespuesta.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-                                            dialog.dismiss();
-                                            segundoDialog(temp, o[0]);
-                                        } else
-                                        {
-                                            ilRespuesta.setHelperText("Respuesta incorrecta");
-                                            ilRespuesta.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.deg)));
-                                        }
-                                    }
-                                });
+                                        CONTADOR_BTN_OLVIDO[0] = 0;
+                                    });
+                                    ImageButton b = v.findViewById(R.id.olvido_cancel);
+                                    b.setOnClickListener(v1 ->
+                                    {
+                                        dialog.dismiss();
+                                        CONTADOR_BTN_OLVIDO[0] = 0;
+                                    });
+                                    MaterialButton btnOk = v.findViewById(R.id.olvido_ok);
+                                    EditText respuesta = v.findViewById(R.id.olvido_RespPregunta);
+                                    TextInputLayout ilRespuesta = v.findViewById(R.id.dialog_olvido_textilResp);
 
-                                EditText pregunta;
-                                pregunta = v.findViewById(R.id.olvido_Pregunta);
-                                pregunta.setText(o[0].getPregunta());
+                                    btnOk.setOnClickListener(new View.OnClickListener()
+                                    {
+                                        @Override
+                                        public void onClick(View v)
+                                        {
+                                            if (o[0].getRespuesta().equals(respuesta.getText().toString()))
+                                            {
+                                                ilRespuesta.setHelperText("Respuesta correcta");
+                                                ilRespuesta.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                                                dialog.dismiss();
+                                                segundoDialog(temp, o[0]);
+                                            } else
+                                            {
+                                                ilRespuesta.setHelperText("Respuesta incorrecta");
+                                                ilRespuesta.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.deg)));
+                                            }
+                                        }
+                                    });
+
+                                    EditText pregunta;
+                                    pregunta = v.findViewById(R.id.olvido_Pregunta);
+                                    pregunta.setText(o[0].getPregunta());
+                                } catch (Exception e)
+                                {
+
+                                }
                                 break;
                             }
                         }
@@ -330,7 +347,7 @@ public class inicioSesion extends AppCompatActivity
         i.putExtra("pregunta", o.getPregunta());
         i.putExtra("respuesta", o.getRespuesta());
         startActivity(i);
-
+        finish();
     }
 
     public void login_2(View view)

@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/fondo_login"
+    android:fitsSystemWindows="false"
     tools:context=".DatosUsuario">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -220,7 +223,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
-                    android:text="Volver"></Button>
+                    android:text="Volver" />
 
                 <Button
                     android:id="@+id/edit"
@@ -229,7 +232,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
-                    android:text="Editar"></Button>
+                    android:text="Editar" />
             </LinearLayout>
 
             <LinearLayout
