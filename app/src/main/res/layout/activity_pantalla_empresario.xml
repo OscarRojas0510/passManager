@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/inversoDeg"
         android:isScrollContainer="false"
-        android:onClick="add"
+        android:onClick="addEmp"
         android:src="@drawable/ic_add"
         app:fabSize="mini"
         app:layout_anchor="@id/inicioEmp_bottom_bar"

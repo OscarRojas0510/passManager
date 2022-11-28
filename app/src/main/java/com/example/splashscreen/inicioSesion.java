@@ -346,6 +346,7 @@ public class inicioSesion extends AppCompatActivity
         i.putExtra("pin", o.getPin());
         i.putExtra("pregunta", o.getPregunta());
         i.putExtra("respuesta", o.getRespuesta());
+        i.putExtra("img", o.getImg());
         startActivity(i);
         finish();
     }

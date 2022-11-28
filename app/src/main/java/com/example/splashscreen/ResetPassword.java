@@ -30,7 +30,7 @@ public class ResetPassword extends AppCompatActivity
     String nombre;
     int pin;
     String pregunta;
-    String respuesta;
+    String respuesta, img;
 
     EditText pass, confirm;
     String key, correo, contrasenia;
@@ -50,6 +50,7 @@ public class ResetPassword extends AppCompatActivity
         pin = getIntent().getIntExtra("pin", 0);
         pregunta = getIntent().getStringExtra("pregunta");
         respuesta = getIntent().getStringExtra("respuesta");
+        img = getIntent().getStringExtra("img");
 
 
         pass = findViewById(R.id.resetPass_pass);

@@ -74,8 +74,6 @@
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
                     app:boxStrokeColor="@color/inversoDeg"
-                    app:endIconMode="password_toggle"
-                    app:endIconTint="@color/black"
                     app:hintTextColor="@color/inversoDeg">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:inputType="textPassword"
+                        android:inputType="none"
                         android:textColor="@color/inversoDeg" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

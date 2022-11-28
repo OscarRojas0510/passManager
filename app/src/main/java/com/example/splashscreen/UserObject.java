@@ -9,10 +9,22 @@ public class UserObject
     private int pin;
     private String pregunta;
     private String respuesta;
+    private String img;
+
 
     public UserObject()
     {
 
+    }
+
+    public String getImg()
+    {
+        return img;
+    }
+
+    public void setImg(String img)
+    {
+        this.img = img;
     }
 
     public UserObject(String contrasenia, String correo, boolean cuenta_empresarial, String nombre, int pin, String pregunta, String respuesta)
