@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_login"
+    android:fitsSystemWindows="false"
     tools:context=".Agregar">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,9 +95,9 @@
                 app:boxStrokeColor="@color/inversoDeg"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/white"
-                app:hintTextColor="@color/inversoDeg"
                 app:helperText="Opcional"
-                app:helperTextTextColor="@color/inversoDeg">
+                app:helperTextTextColor="@color/inversoDeg"
+                app:hintTextColor="@color/inversoDeg">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addPass_User"
@@ -136,8 +139,8 @@
                 android:layout_weight="2"
                 android:backgroundTint="@color/inversoDeg"
                 android:elevation="30dp"
-                android:scaleType="fitCenter"
                 android:onClick="registraPass"
+                android:scaleType="fitCenter"
                 android:src="@android:drawable/ic_menu_save" />
 
         </LinearLayout>

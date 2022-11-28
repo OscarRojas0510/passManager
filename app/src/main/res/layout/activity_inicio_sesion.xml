@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_login"
-    tools:context=".inicioSesion">
+    tools:context=".inicioSesion"
+    android:fitsSystemWindows="false"
+    >
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fitsSystemWindows="true"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layoutDescription="@xml/activity_inicio_sesion_scene"
             android:layout_gravity="fill">
 
@@ -182,7 +185,7 @@
             LA GEEKIPEDIA DE ERNESTO
             -->
         </androidx.constraintlayout.motion.widget.MotionLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

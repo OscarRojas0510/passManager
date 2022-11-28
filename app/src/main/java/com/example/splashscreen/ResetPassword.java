@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -59,7 +60,7 @@ public class ResetPassword extends AppCompatActivity
 
     public void resetPassClose(View view)
     {
-        finish();
+        abrirInicioSesion();
     }
 
     public void resetPassOk(View view)
@@ -68,8 +69,6 @@ public class ResetPassword extends AppCompatActivity
         String confirmation = confirm.getText().toString();
         if (!password.isEmpty() && !confirmation.isEmpty() && password.equals(confirmation))
         {
-            Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, correo, Toast.LENGTH_SHORT).show();
             passil.setError("");
             confil.setError("");
             auth = FirebaseAuth.getInstance();
@@ -104,7 +103,7 @@ public class ResetPassword extends AppCompatActivity
                                                 public void onSuccess(Void unused)
                                                 {
                                                     Toast.makeText(ResetPassword.this, "Se ha modificado la contraseña", Toast.LENGTH_SHORT).show();
-                                                    finish();
+                                                    abrirInicioSesion();
                                                 }
                                             });
                                 }
@@ -117,6 +116,13 @@ public class ResetPassword extends AppCompatActivity
                     {
 
                     }
+                }
+            }).addOnFailureListener(new OnFailureListener()
+            {
+                @Override
+                public void onFailure(@NonNull Exception e)
+                {
+                    Toast.makeText(ResetPassword.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         } else
@@ -132,5 +138,19 @@ public class ResetPassword extends AppCompatActivity
                 confil.setError("Campo Obligatorio");
             }
         }
+    }
+
+    private void abrirInicioSesion()
+    {
+        Intent i = new Intent(ResetPassword.this, inicioSesion.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        abrirInicioSesion();
     }
 }

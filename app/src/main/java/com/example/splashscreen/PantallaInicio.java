@@ -211,6 +211,14 @@ public class PantallaInicio extends AppCompatActivity
         finish();
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent i = new Intent(PantallaInicio.this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
 
     public void userinf(MenuItem item)
     {
