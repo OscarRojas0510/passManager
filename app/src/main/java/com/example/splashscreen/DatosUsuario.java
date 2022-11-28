@@ -3,13 +3,25 @@ package com.example.splashscreen;
 import static com.example.splashscreen.EncriptarTexto.desencriptar;
 import static com.example.splashscreen.EncriptarTexto.encriptar;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.utils.widget.ImageFilterButton;
+import androidx.constraintlayout.utils.widget.ImageFilterView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +52,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatosUsuario extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener
 {
@@ -50,16 +68,21 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     private Button cancel, save, back, edit;
 
     EditText correoUser, user, password, confPassword, res, pin, quest;
-    String correoUserDB, userDB, passwordDB, resDB, pinDB, questDB, nivelDB;
+    String correoUserDB, userDB, passwordDB, resDB, pinDB, questDB, nivelDB,imageDB;
     TextInputLayout confPass, confEmail;
     LinearLayout editor, navAct;
-
+    ImageFilterView userImage;
+    ImageFilterButton captImage;
     static String URLfoto = "";
+    String imgurl;
     FirebaseDatabase firebaseDataBase;
     DatabaseReference databaseReference;
-
     private StorageReference mstorage;
 
+    private StorageReference mstorageRef;
+    private static byte bb[];
+
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -68,6 +91,12 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         componentes();
         id = getIntent().getStringExtra("key");
         getUserDB();
+        userImage = findViewById(R.id.userImageAct);
+        BitmapDrawable drawable = (BitmapDrawable) userImage.getDrawable();
+        Bitmap thumbnail = drawable.getBitmap();
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        bb=bytes.toByteArray();
     }
 
     private void componentes()
@@ -83,10 +112,12 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         back = this.findViewById(R.id.backAct);
         edit = this.findViewById(R.id.edit);
         cancel = this.findViewById(R.id.cancel);
+        captImage=this.findViewById(R.id.upNewUserImage);
         edit.setOnClickListener(this);
         cancel.setOnClickListener(this);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
+        captImage.setOnClickListener(this);
     }
 
     private void EditTextComponentes()
@@ -98,11 +129,9 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         pin = this.findViewById(R.id.pinUser);
         quest = this.findViewById(R.id.preguntaUser);
         res = this.findViewById(R.id.respPreguntaUser);
-
-
+        userImage=findViewById(R.id.userImage);
         confPass = this.findViewById(R.id.confPasswordUserBox);
         confEmail = this.findViewById(R.id.correoUserBox);
-
 
         confPassword.setOnFocusChangeListener(new View.OnFocusChangeListener()
         {
@@ -143,6 +172,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                             resDB = userTemp[0].getRespuesta();
                             pinDB = userTemp[0].getPin() + "";
                             oldpass = passwordDB;
+                            imageDB=userTemp[0].getImg();
                             //nivelDB = "" + userTemp[0].isCuenta_empresarial();
 
                             // img = cursor.getString(9);
@@ -153,6 +183,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                             pin.setText(pinDB);
                             quest.setText(questDB);
                             res.setText(resDB);
+                            Picasso.with(DatosUsuario.this).load(imageDB).into(userImage);
                         }
 
                     }
@@ -187,6 +218,8 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             case R.id.save:
                 changeDataUser(v);
                 break;
+            case R.id.upNewUserImage:
+                addPassTakePhoto(v);
         }
     }
 
@@ -238,6 +271,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             quest.setEnabled(true);
             res.setEnabled(true);
             confPass.setVisibility(View.VISIBLE);
+            captImage.setVisibility(View.VISIBLE);
             navAct.setVisibility(View.GONE);
             editor.setVisibility(View.VISIBLE);
         } else
@@ -250,6 +284,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             res.setEnabled(false);
             confPass.setVisibility(View.GONE);
             editor.setVisibility(View.GONE);
+            captImage.setVisibility(View.GONE);
             navAct.setVisibility(View.VISIBLE);
         }
     }
@@ -306,12 +341,73 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                                 {
                                     if (task.isSuccessful())
                                     {
-                                        databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
+
+                                        DatabaseReference firebaseDataBase;
+                                        firebaseDataBase = FirebaseDatabase.getInstance().getReference().child("usuarios");
+                                        firebaseDataBase.setValue(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot)
+                                            {
+                                                int cont = 0;
+                                                final Usuarios[] userTemp = new Usuarios[1];
+                                                for (DataSnapshot objSnapshot : snapshot.getChildren())
+                                                {
+                                                    if (snapshot.exists())
+                                                    {
+                                                        userTemp[0] = objSnapshot.getValue(Usuarios.class);
+                                                        userTemp[0].setId(objSnapshot.getKey());
+                                                        if (userTemp[0].getId().equals(id))
+                                                        {
+                                                            userTemp[0].setCorreo(correoAdd);
+                                                            userTemp[0].setContrasenia(password.getText().toString());
+                                                            userTemp[0].setNombre(userAdd);
+                                                            userTemp[0].setPregunta(questAdd);
+                                                            userTemp[0].setRespuesta(resAdd);
+                                                            userTemp[0].setPin(pinAdd);
+                                                            String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
+                                                            @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                                            String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
+                                                            StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+                                                            sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                                                            {
+                                                                imgurl = String.valueOf(uri);
+                                                                userTemp[0].setImg(imgurl);
+                                                                cancel.performClick();
+                                                                Toast.makeText(DatosUsuario.this, "Registro existoso", Toast.LENGTH_SHORT).show();
+                                                            }).addOnFailureListener(e ->
+                                                            {
+                                                                Toast.makeText(DatosUsuario.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                            }));
+                                                            //nivelDB = "" + userTemp[0].isCuenta_empresarial();
+
+                                                            // img = cursor.getString(9);
+                                                            correoUser.setText(correoUserDB);
+                                                            user.setText(userDB);
+                                                            password.setText(passwordDB);
+                                                            confPassword.setText(passwordDB);
+                                                            pin.setText(pinDB);
+                                                            quest.setText(questDB);
+                                                            res.setText(resDB);
+                                                            Picasso.with(DatosUsuario.this).load(imgurl).into(userImage);
+                                                        }
+
+                                                    }
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error)
+                                            {
+
+                                            }
+                                        });
+                                        /*databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
                                         databaseReference.child("usuarios").child(id).child("contrasenia").setValue(passwordAdd);
                                         databaseReference.child("usuarios").child(id).child("pin").setValue(pinAdd);
                                         databaseReference.child("usuarios").child(id).child("pregunta").setValue(questAdd);
                                         databaseReference.child("usuarios").child(id).child("respuesta").setValue(resAdd);
-                                        Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();*/
                                     } else
                                     {
                                         Toast.makeText(DatosUsuario.this, "Algo malo paso", Toast.LENGTH_SHORT).show();
@@ -353,6 +449,38 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             confPass.setHelperTextEnabled(false);
             return true;
         }
+    }
+
+    public void addPassTakePhoto(View view)
+    {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+        {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+        }
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startCamera.launch(i);
+    }
+
+    ActivityResultLauncher<Intent> startCamera = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        onCaptureResult(data);
+                    }
+                }
+            });
+
+    private void onCaptureResult(Intent data)
+    {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+        bb = bytes.toByteArray();
+        //String file = Base64.encodeToString(bb, Base64.DEFAULT);
+        userImage.setImageBitmap(thumbnail);
     }
 
     @Override

@@ -35,6 +35,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
@@ -152,25 +153,37 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onSuccess(AuthResult authResult)
             {
-                databaseReference.child("usuarios").child(userNew.getId()).setValue(userNew);
-                cancelar.performClick();
-                Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
-                abrirInicioSesión();
-                if (upUserImage()){
-                    userNew.setImg(imgurl);
-                    databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            cancelar.performClick();
-                            Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
+                String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
+                @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
+                StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+                sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                {
+                    imgurl = String.valueOf(uri);
+                    image=true;
+
+                    if (image){
+                        userNew.setImg(imgurl);
+                        databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                cancelar.performClick();
+                                Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
+                                abrirInicioSesión();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                }).addOnFailureListener(e ->
+                {
+                    image=false;
+                    Toast.makeText(Registrarse.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
+                }));
             }
         }).addOnFailureListener(new OnFailureListener()
         {
@@ -347,13 +360,15 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
     {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.PNG, 90, bytes);
         bb = bytes.toByteArray();
         //String file = Base64.encodeToString(bb, Base64.DEFAULT);
         userImage.setImageBitmap(thumbnail);
     }
 
-    public boolean upUserImage(){
+    //Se debe colocar dentro del registra debido al jodido Firebase, que no permite llamadas masivas. o eso creo
+    //solo sé que si la separo, esto falla
+    public void upUserImage(){
         String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
@@ -367,7 +382,6 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
             image=false;
             Toast.makeText(this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
         }));
-        return image;
     }
 
     @Override

@@ -25,11 +25,37 @@
             android:orientation="vertical"
             android:paddingBottom="30dp">
 
-            <ImageView
-                android:layout_width="300px"
-                android:layout_height="300px"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher_round"></ImageView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <androidx.constraintlayout.utils.widget.ImageFilterView
+                    android:id="@+id/userImageAct"
+                    android:layout_width="196dp"
+                    android:layout_height="189dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    app:srcCompat="@drawable/user"
+                    tools:srcCompat="@drawable/user"
+                    >
+
+                </androidx.constraintlayout.utils.widget.ImageFilterView>
+
+                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                    android:id="@+id/upNewUserImage"
+                    android:layout_width="67dp"
+                    android:layout_height="73dp"
+                    android:adjustViewBounds="false"
+                    android:background="@drawable/plus"
+                    android:clickable="true"
+                    android:translationX="150dp"
+                    android:translationY="110dp"
+                    android:visibility="gone">
+
+                </androidx.constraintlayout.utils.widget.ImageFilterButton>
+
+            </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/correoUserBox"
