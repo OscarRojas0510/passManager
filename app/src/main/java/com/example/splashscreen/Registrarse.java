@@ -52,7 +52,6 @@ import java.util.Date;
 
 public class Registrarse extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, DatePickerDialog.OnDateSetListener
 {
-    //Okitegami
     private Button registrar, cancelar;
     AutoCompleteTextView autoCompleteTextView;
     FirebaseAuth auth;
