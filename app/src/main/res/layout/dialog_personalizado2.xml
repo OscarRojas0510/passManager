@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:elevation="5dp"
-            android:hint="Respuesta"
+            android:hint="nombre de la cuenta"
             android:textColorHint="@color/white"
             app:boxBackgroundMode="outline"
             app:boxCornerRadiusTopEnd="10dp"
@@ -39,8 +39,6 @@
             app:boxStrokeColor="@color/white"
             app:endIconMode="clear_text"
             app:endIconTint="@color/white"
-            app:helperText="Cuida el uso de Mayuscúlas y minúsculas"
-            app:helperTextTextColor="@color/white"
             app:hintTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -190,6 +190,16 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
+        i.putExtra("key", id);
+        startActivity(i);
+        finish();
+    }
+
     public void editBox(boolean show)
     {
         editor = findViewById(R.id.editor);

@@ -71,6 +71,9 @@ public class Agregar extends AppCompatActivity
 
     public void addPassClose(View view)
     {
+        Intent i = new Intent(Agregar.this, PantallaInicio.class);
+        i.putExtra("key", key);
+        startActivity(i);
         finish();
     }
 
@@ -78,11 +81,9 @@ public class Agregar extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        Intent i = new Intent(Agregar.this, PantallaInicio.class);
-        i.putExtra("key", key);
-        startActivity(i);
+        finish();
     }
-    
+
     public void addPassTakePhoto(View view)
     {
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
@@ -120,6 +121,9 @@ public class Agregar extends AppCompatActivity
     public void onBackPressed()
     {
         super.onBackPressed();
+        Intent i = new Intent(Agregar.this, PantallaInicio.class);
+        i.putExtra("key", key);
+        startActivity(i);
         finish();
     }
 

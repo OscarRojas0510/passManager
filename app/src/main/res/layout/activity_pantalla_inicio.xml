@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_login"
+    android:fitsSystemWindows="true"
     tools:context=".PantallaInicio">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="25dp"
-        android:gravity="fill"
         android:layout_marginBottom="50dp"
+        android:fitsSystemWindows="false"
+        android:gravity="fill"
         android:orientation="vertical">
 
         <TextView
@@ -44,14 +46,15 @@
         android:layout_gravity="bottom"
         android:background="@drawable/deg2"
         android:backgroundTint="@color/inversoDeg"
-        app:fabCradleMargin="5dp"
-        app:fabCradleRoundedCornerRadius="10dp"
-        app:hideOnScroll="true"
+        android:fitsSystemWindows="false"
+        android:isScrollContainer="false"
         app:fabAlignmentMode="center"
         app:fabAnimationMode="scale"
-        app:removeEmbeddedFabElevation="true"
+        app:fabCradleMargin="5dp"
+        app:fabCradleRoundedCornerRadius="10dp"
         app:fabCradleVerticalOffset="0dp"
-        >
+        app:hideOnScroll="true"
+        app:removeEmbeddedFabElevation="true">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_view"
@@ -59,23 +62,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
+            android:fitsSystemWindows="false"
+            android:isScrollContainer="false"
+            app:itemIconTint="@color/deg"
             app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_menu"
-            app:itemIconTint="@color/deg"/>
+            app:menu="@menu/bottom_menu" />
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/inversoDeg"
+        android:isScrollContainer="false"
         android:onClick="add"
         android:src="@drawable/ic_add"
+        app:fabSize="mini"
         app:layout_anchor="@id/inicio_bottom_bar"
         app:layout_anchorGravity="bottom"
         app:maxImageSize="25dp"
-        app:fabSize="mini"
-        app:tint="@color/deg"
-        />
+        app:tint="@color/deg" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

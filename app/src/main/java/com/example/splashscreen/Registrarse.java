@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -104,6 +105,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                 databaseReference.child("usuarios").child(userNew.getId()).setValue(userNew);
                 cancelar.performClick();
                 Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
+                abrirInicioSesión();
             }
         }).addOnFailureListener(new OnFailureListener()
         {
@@ -164,9 +166,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         {
 
             case R.id.mainBtnSalir:
-                Intent i = new Intent(Registrarse.this, inicioSesion.class);
-                startActivity(i);
-                //finish();
+                abrirInicioSesión();
                 break;
             case R.id.mainBtnLogin:
                 if (
@@ -192,7 +192,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                     if (validaCorreo() && validaPassword())
                     {
                         Usuarios userNew = new Usuarios(idAdd, correoAdd, passwordAdd, userAdd, questAdd, resAdd, pinAdd, false);
-                        registro( userNew);
+                        registro(userNew);
                     } else
                     {
                         Toast.makeText(v.getContext(), "Complete los campos", Toast.LENGTH_LONG).show();
@@ -221,6 +221,20 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
         }
+    }
+
+    private void abrirInicioSesión()
+    {
+        Intent i = new Intent(Registrarse.this, inicioSesion.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        abrirInicioSesión();
     }
 
     public boolean validaCorreo()
