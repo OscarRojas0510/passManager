@@ -9,13 +9,50 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <androidx.constraintlayout.utils.widget.ImageFilterView
+                    android:id="@+id/userImage"
+                    android:layout_width="196dp"
+                    android:layout_height="189dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    app:srcCompat="@drawable/user"
+                    tools:srcCompat="@drawable/user"
+                    >
+
+                </androidx.constraintlayout.utils.widget.ImageFilterView>
+
+                <androidx.constraintlayout.utils.widget.ImageFilterButton
+                    android:id="@+id/upUserImage"
+                    android:layout_width="67dp"
+                    android:layout_height="73dp"
+                    android:adjustViewBounds="false"
+                    android:background="@drawable/plus"
+                    android:clickable="true"
+                    android:onClick="addPassTakePhoto"
+                    android:translationX="150dp"
+                    android:translationY="110dp">
+
+                </androidx.constraintlayout.utils.widget.ImageFilterButton>
+
+            </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/correo"

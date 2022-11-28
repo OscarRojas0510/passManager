@@ -2,13 +2,13 @@ package com.example.splashscreen;
 
 public class Usuarios
 {
-    String id,correo, contrasenia, nombre, pregunta, respuesta;
+    String id,correo, contrasenia, nombre, pregunta, respuesta, img;
     int pin;
     boolean cuenta_empresarial;
     public Usuarios(){
 
     }
-    public Usuarios(String id, String correo, String password, String user, String quest, String res, int pin, boolean cuenta_empresarial){
+    public Usuarios(String id, String correo, String password, String user, String quest, String res, int pin, boolean cuenta_empresarial, String img){
         this.id=id;
         this.correo=correo;
         this.contrasenia =password;
@@ -17,6 +17,7 @@ public class Usuarios
         this.pregunta =quest;
         this.pin=pin;
         this.cuenta_empresarial=cuenta_empresarial;
+        this.img=img;
     }
 
     public String getId() {
@@ -52,6 +53,10 @@ public class Usuarios
         return cuenta_empresarial;
     }
 
+    public String getImg() {
+        return img;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -82,5 +87,9 @@ public class Usuarios
 
     public void setCuenta_empresarial(boolean cuenta_empresarial) {
         this.cuenta_empresarial = cuenta_empresarial;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }
