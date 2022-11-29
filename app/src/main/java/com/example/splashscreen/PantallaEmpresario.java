@@ -88,6 +88,9 @@ public class PantallaEmpresario extends AppCompatActivity
     //boton icono usuario de la barra inferior
     public void empUserinf(MenuItem item)
     {
+        Intent i = new Intent(PantallaEmpresario.this, DatosUsuario.class);
+        i.putExtra("key", key);
+        startActivity(i);
         Toast.makeText(this, "empUserInf", Toast.LENGTH_SHORT).show();
     }
 

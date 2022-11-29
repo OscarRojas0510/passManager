@@ -60,7 +60,7 @@ public class Usuarios
     }
 
 
-    public boolean isCuenta_empresarial()
+    public boolean getCuenta_empresarial()
     {
         return cuenta_empresarial;
     }

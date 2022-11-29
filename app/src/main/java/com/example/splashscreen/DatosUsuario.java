@@ -73,7 +73,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     TextInputLayout confPass, confEmail;
     LinearLayout editor, navAct;
     ImageFilterView userImage;
-    ImageFilterButton captImage;
+    ImageFilterButton captImage,upUserNivel;
     static String URLfoto = "";
     String imgurl;
     FirebaseDatabase firebaseDataBase;
@@ -118,11 +118,13 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         edit = this.findViewById(R.id.edit);
         cancel = this.findViewById(R.id.cancel);
         captImage=this.findViewById(R.id.upNewUserImage);
+        upUserNivel=this.findViewById(R.id.upNewUserAdmin);
         edit.setOnClickListener(this);
         cancel.setOnClickListener(this);
         back.setOnClickListener(this);
         save.setOnClickListener(this);
         captImage.setOnClickListener(this);
+        upUserNivel.setOnClickListener(this);
     }
 
     private void EditTextComponentes()
@@ -179,6 +181,10 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                             questDB = userTemp[0].getPregunta();
                             resDB = userTemp[0].getRespuesta();
                             pinDB = userTemp[0].getPin() + "";
+                            boolean admin=userTemp[0].getCuenta_empresarial();
+                            if(admin){
+                                upUserNivel.setVisibility(View.GONE);
+                            }
                             oldpass = passwordDB;
                             imageDB=userTemp[0].getImg();
                             //nivelDB = "" + userTemp[0].isCuenta_empresarial();
@@ -228,6 +234,10 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.upNewUserImage:
                 addPassTakePhoto(v);
+                break;
+            case R.id.upNewUserAdmin:
+                upAdmin();
+                break;
         }
     }
 
@@ -455,6 +465,22 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         bb = bytes.toByteArray();
         //String file = Base64.encodeToString(bb, Base64.DEFAULT);
         userImage.setImageBitmap(thumbnail);
+    }
+
+    public void upAdmin(){
+        final Usuarios[] userTemp = new Usuarios[1];
+        for (DataSnapshot objSnapshot : snapshotNew.getChildren()) {
+            if (snapshotNew.exists()) {
+                userTemp[0] = objSnapshot.getValue(Usuarios.class);
+                userTemp[0].setId(objSnapshot.getKey());
+                if (userTemp[0].getId().equals(id)) {
+                    databaseReference.child("usuarios").child(id).child("cuenta_empresarial").setValue(true);
+                    upUserNivel.setVisibility(View.GONE);
+                    Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
     }
 
     @Override

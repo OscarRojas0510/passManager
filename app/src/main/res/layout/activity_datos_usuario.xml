@@ -25,37 +25,55 @@
             android:orientation="vertical"
             android:paddingBottom="30dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent">
+                    <androidx.constraintlayout.utils.widget.ImageFilterButton
+                        android:id="@+id/upNewUserAdmin"
+                        android:layout_width="67dp"
+                        android:layout_height="73dp"
+                        android:background="@drawable/boss"
+                        android:clickable="true"
+                        android:translationX="10dp"
+                        android:translationY="100dp">
 
-                <androidx.constraintlayout.utils.widget.ImageFilterView
-                    android:id="@+id/userImageAct"
-                    android:layout_width="196dp"
-                    android:layout_height="189dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/user"
-                    app:srcCompat="@drawable/user"
-                    tools:srcCompat="@drawable/user"
-                    >
+                    </androidx.constraintlayout.utils.widget.ImageFilterButton>
+                </LinearLayout>
 
-                </androidx.constraintlayout.utils.widget.ImageFilterView>
+                <RelativeLayout
+                    android:layout_width="250dp"
+                    android:layout_height="200dp">
 
-                <androidx.constraintlayout.utils.widget.ImageFilterButton
-                    android:id="@+id/upNewUserImage"
-                    android:layout_width="67dp"
-                    android:layout_height="73dp"
-                    android:adjustViewBounds="false"
-                    android:background="@drawable/plus"
-                    android:clickable="true"
-                    android:translationX="150dp"
-                    android:translationY="110dp"
-                    android:visibility="gone">
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/userImageAct"
+                        android:layout_width="196dp"
+                        android:layout_height="189dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/user"
+                        app:srcCompat="@drawable/user"
+                        tools:srcCompat="@drawable/user">
 
-                </androidx.constraintlayout.utils.widget.ImageFilterButton>
+                    </androidx.constraintlayout.utils.widget.ImageFilterView>
 
-            </RelativeLayout>
+                    <androidx.constraintlayout.utils.widget.ImageFilterButton
+                        android:id="@+id/upNewUserImage"
+                        android:layout_width="67dp"
+                        android:layout_height="73dp"
+                        android:adjustViewBounds="false"
+                        android:background="@drawable/plus"
+                        android:clickable="true"
+                        android:translationX="150dp"
+                        android:translationY="110dp"
+                        android:visibility="gone">
+
+                    </androidx.constraintlayout.utils.widget.ImageFilterButton>
+
+                </RelativeLayout>
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/correoUserBox"
