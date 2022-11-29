@@ -356,6 +356,13 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                                                     @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                                                     String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
                                                     StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+
+                                                    BitmapDrawable drawable = (BitmapDrawable) userImage.getDrawable();
+                                                    Bitmap thumbnail = drawable.getBitmap();
+                                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                                                    bb=bytes.toByteArray();
+
                                                     sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
                                                     {
                                                         imgurl = String.valueOf(uri);
