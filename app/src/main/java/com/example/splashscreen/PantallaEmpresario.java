@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,7 +100,9 @@ public class PantallaEmpresario extends AppCompatActivity
     //boton icono logout de la barra inferior
     public void empLogout(MenuItem item)
     {
-        Toast.makeText(this, "empLogout", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(PantallaEmpresario.this, inicioSesion.class);
+        startActivity(i);
+        finish();
     }
 
     //boton icono llave de la barra inferior
@@ -111,6 +114,32 @@ public class PantallaEmpresario extends AppCompatActivity
     //botón circular inferior
     public void addEmp(View view)
     {
-        Toast.makeText(this, "addEmp", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(PantallaEmpresario.this, EmpAgregaUser.class);
+        i.putExtra("key", key);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        Intent i = new Intent(PantallaEmpresario.this, inicioSesion.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        finish();
     }
 }

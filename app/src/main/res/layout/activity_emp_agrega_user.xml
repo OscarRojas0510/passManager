@@ -31,7 +31,7 @@
                 android:gravity="center">
 
                 <androidx.constraintlayout.utils.widget.ImageFilterView
-                    android:id="@+id/EmpAgregaUser_Image"
+                    android:id="@+id/empAgregaUser_Foto"
                     android:layout_width="196dp"
                     android:layout_height="189dp"
                     android:layout_gravity="center"
@@ -42,13 +42,12 @@
                 </androidx.constraintlayout.utils.widget.ImageFilterView>
 
                 <androidx.constraintlayout.utils.widget.ImageFilterButton
-                    android:id="@+id/upUserImage"
                     android:layout_width="67dp"
                     android:layout_height="73dp"
                     android:adjustViewBounds="false"
                     android:background="@drawable/plus"
                     android:clickable="true"
-                    android:onClick="addPassTakePhoto"
+                    android:onClick="empAgregaUser_takeFoto"
                     android:translationX="150dp"
                     android:translationY="110dp">
 
@@ -57,7 +56,7 @@
             </RelativeLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/correo"
+                android:id="@+id/empAgregaUser_correo"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regCorreo"
+                    android:id="@+id/empAgregaUser_regCorreo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
@@ -100,7 +99,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regUser"
+                    android:id="@+id/empAgregaUser_User"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white" />
@@ -124,7 +123,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regPass"
+                    android:id="@+id/empAgregaUser_Pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -132,7 +131,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/confPasword"
+                android:id="@+id/empAgregaUser_confPasword"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,7 +149,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/confPass"
+                    android:id="@+id/empAgregaUser_confPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -175,7 +174,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/refPin"
+                    android:id="@+id/empAgregaUser_Pin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberPassword"
@@ -198,7 +197,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <AutoCompleteTextView
-                    android:id="@+id/regPregunta"
+                    android:id="@+id/empAgregaUser_Pregunta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none">
@@ -224,7 +223,7 @@
                 app:hintTextColor="@color/verde_0ff248">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/regRespPregunta"
+                    android:id="@+id/empAgregaUser_RespPregunta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white" />
@@ -236,22 +235,22 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/mainBtnSalir"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
+                    android:onClick="empAgregaUser_cancel"
                     android:text="Cancelar"
                     android:textColor="@color/white" />
 
                 <Button
-                    android:id="@+id/mainBtnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="5"
                     android:elevation="5dp"
+                    android:onClick="empAgregaUser_registrar"
                     android:text="Registrarse"
                     android:textColor="@color/white" />
             </LinearLayout>
