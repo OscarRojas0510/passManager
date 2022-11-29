@@ -144,17 +144,13 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         Toast.makeText(this, autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
     }*/
 
-    public void registro()
-    {
-        if (bb != null)
-        {
+    public void registro() {
+        if (bb != null) {
             String corr = correo.getText().toString().trim();
             String passw = pass.getText().toString().trim();
-            auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>()
-            {
+            auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
-                public void onSuccess(AuthResult authResult)
-                {
+                public void onSuccess(AuthResult authResult) {
                     String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
                     @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                     String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
@@ -164,38 +160,37 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                         imgurl = String.valueOf(uri);
                         image = true;
 
-                    if (image){
-                        userNew.setImg(imgurl);
-                        databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                cancelar.performClick();
-                                Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
-                                abrirInicioSesión();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+                        if (image) {
+                            userNew.setImg(imgurl);
+                            databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    cancelar.performClick();
+                                    Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
+                                    abrirInicioSesion();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
 
-                }).addOnFailureListener(e ->
-                {
-                    image=false;
-                    Toast.makeText(Registrarse.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
-                }));
-            }
-        }).addOnFailureListener(new OnFailureListener()
-        {
-            @Override
-            public void onFailure(@NonNull Exception e)
-            {
-                limpiar();
-                Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                    }).addOnFailureListener(e ->
+                    {
+                        image = false;
+                        Toast.makeText(Registrarse.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    limpiar();
+                    Toast.makeText(Registrarse.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private void BotonesComponentes()
@@ -249,7 +244,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         {
 
             case R.id.mainBtnSalir:
-                abrirInicioSesión();
+                abrirInicioSesion();
                 break;
             case R.id.mainBtnLogin:
                 if (
@@ -310,7 +305,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void abrirInicioSesión()
+    private void abrirInicioSesion()
     {
         Intent i = new Intent(Registrarse.this, inicioSesion.class);
         startActivity(i);
@@ -321,7 +316,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
     public void onBackPressed()
     {
         super.onBackPressed();
-        abrirInicioSesión();
+        abrirInicioSesion();
     }
 
     public boolean validaCorreo()
