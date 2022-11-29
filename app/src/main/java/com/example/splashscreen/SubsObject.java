@@ -2,10 +2,20 @@ package com.example.splashscreen;
 
 public class SubsObject
 {
-    private String id, correo, nombre, img;
+    private String id, correo, nombre, img, admin;
 
     public SubsObject()
     {
+    }
+
+    public String getAdmin()
+    {
+        return admin;
+    }
+
+    public void setAdmin(String admin)
+    {
+        this.admin = admin;
     }
 
     public String getCorreo()

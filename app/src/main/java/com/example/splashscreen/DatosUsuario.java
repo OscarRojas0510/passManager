@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,26 +36,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -67,13 +61,15 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     AutoCompleteTextView autoCompleteTextView;
     FirebaseAuth auth;
     private Button cancel, save, back, edit;
+    int ventana = 0;
+    String keya = null;
 
-    EditText correoUser, user, password, confPassword, res, pin, quest;
-    String correoUserDB, userDB, passwordDB, resDB, pinDB, questDB, nivelDB,imageDB;
+    EditText correoUser, user, password, confPassword, res, pin, quest, ubicacion;
+    String correoUserDB, userDB, passwordDB, resDB, pinDB, questDB, nivelDB, imageDB;
     TextInputLayout confPass, confEmail;
     LinearLayout editor, navAct;
     ImageFilterView userImage;
-    ImageFilterButton captImage,upUserNivel;
+    ImageFilterButton captImage, upUserNivel;
     static String URLfoto = "";
     String imgurl;
     FirebaseDatabase firebaseDataBase;
@@ -94,13 +90,15 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_datos_usuario);
         componentes();
         id = getIntent().getStringExtra("key");
+        keya = getIntent().getStringExtra("keya");
+        ventana = getIntent().getIntExtra("ventana", 0);
         getUserDB();
         userImage = findViewById(R.id.userImageAct);
         BitmapDrawable drawable = (BitmapDrawable) userImage.getDrawable();
         Bitmap thumbnail = drawable.getBitmap();
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        bb=bytes.toByteArray();
+        bb = bytes.toByteArray();
         mstorageRef = FirebaseStorage.getInstance().getReference();
     }
 
@@ -117,8 +115,8 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         back = this.findViewById(R.id.backAct);
         edit = this.findViewById(R.id.edit);
         cancel = this.findViewById(R.id.cancel);
-        captImage=this.findViewById(R.id.upNewUserImage);
-        upUserNivel=this.findViewById(R.id.upNewUserAdmin);
+        captImage = this.findViewById(R.id.upNewUserImage);
+        upUserNivel = this.findViewById(R.id.upNewUserAdmin);
         edit.setOnClickListener(this);
         cancel.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -129,6 +127,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
 
     private void EditTextComponentes()
     {
+        ubicacion = findViewById(R.id.datos_user_ubicacion);
         correoUser = findViewById(R.id.datos_users_correoUser);
         user = findViewById(R.id.nameUser);
         password = findViewById(R.id.passUser);
@@ -136,7 +135,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         pin = this.findViewById(R.id.pinUser);
         quest = this.findViewById(R.id.preguntaUser);
         res = this.findViewById(R.id.respPreguntaUser);
-        userImage=findViewById(R.id.userImage);
+        userImage = findViewById(R.id.userImage);
         confPass = this.findViewById(R.id.confPasswordUserBox);
         confEmail = this.findViewById(R.id.correoUserBox);
 
@@ -162,33 +161,34 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
-                snapshotNew=snapshot;
+                snapshotNew = snapshot;
                 int cont = 0;
                 final Usuarios[] userTemp = new Usuarios[1];
                 for (DataSnapshot objSnapshot : snapshot.getChildren())
                 {
-                    objSnapshotNew=objSnapshot;
+                    objSnapshotNew = objSnapshot;
                     if (snapshot.exists())
                     {
                         userTemp[0] = objSnapshot.getValue(Usuarios.class);
                         userTemp[0].setId(objSnapshot.getKey());
                         if (userTemp[0].getId().equals(id))
                         {
-                            Toast.makeText(DatosUsuario.this,id,Toast.LENGTH_SHORT);
+                            Toast.makeText(DatosUsuario.this, id, Toast.LENGTH_SHORT);
                             correoUserDB = userTemp[0].getCorreo();
                             passwordDB = desencriptar(userTemp[0].getContrasenia());
                             userDB = userTemp[0].getNombre();
                             questDB = userTemp[0].getPregunta();
                             resDB = userTemp[0].getRespuesta();
                             pinDB = userTemp[0].getPin() + "";
-                            boolean admin=userTemp[0].getCuenta_empresarial();
-                            if(admin){
+                            boolean admin = userTemp[0].getCuenta_empresarial();
+                            if (admin)
+                            {
                                 upUserNivel.setVisibility(View.GONE);
                             }
                             oldpass = passwordDB;
-                            imageDB=userTemp[0].getImg();
+                            imageDB = userTemp[0].getImg();
+                            ubicacion.setText(userTemp[0].getUlt_login());
                             //nivelDB = "" + userTemp[0].isCuenta_empresarial();
-
                             // img = cursor.getString(9);
                             correoUser.setText(correoUserDB);
                             user.setText(userDB);
@@ -218,9 +218,25 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.backAct:
-                Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
-                i.putExtra("key", id);
-                startActivity(i);
+                if (ventana == 5)
+                {
+                    Intent i = new Intent(DatosUsuario.this, PantallaEmpresario.class);
+                    i.putExtra("key", keya);
+                    startActivity(i);
+                } else
+                {
+                    if (ventana == 4)
+                    {
+                        Intent i = new Intent(DatosUsuario.this, PantallaEmpresario.class);
+                        i.putExtra("key", id);
+                        startActivity(i);
+                    } else
+                    {
+                        Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
+                        i.putExtra("key", id);
+                        startActivity(i);
+                    }
+                }
                 finish();
                 break;
             case R.id.cancel:
@@ -245,9 +261,25 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed()
     {
         super.onBackPressed();
-        Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
-        i.putExtra("key", id);
-        startActivity(i);
+        if (ventana == 5)
+        {
+            Intent i = new Intent(DatosUsuario.this, PantallaEmpresario.class);
+            i.putExtra("key", keya);
+            startActivity(i);
+        } else
+        {
+            if (ventana == 4)
+            {
+                Intent i = new Intent(DatosUsuario.this, PantallaEmpresario.class);
+                i.putExtra("key", id);
+                startActivity(i);
+            } else
+            {
+                Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
+                i.putExtra("key", id);
+                startActivity(i);
+            }
+        }
         finish();
     }
 
@@ -352,16 +384,22 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                     {
                         if (task.isSuccessful())
                         {
-                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>()
+                            {
                                 @Override
-                                public void onSuccess(Void unused) {
+                                public void onSuccess(Void unused)
+                                {
                                     final Usuarios[] userTemp = new Usuarios[1];
-                                    if (task.isSuccessful()) {
-                                        for (DataSnapshot objSnapshot : snapshotNew.getChildren()) {
-                                            if (snapshotNew.exists()) {
+                                    if (task.isSuccessful())
+                                    {
+                                        for (DataSnapshot objSnapshot : snapshotNew.getChildren())
+                                        {
+                                            if (snapshotNew.exists())
+                                            {
                                                 userTemp[0] = objSnapshot.getValue(Usuarios.class);
                                                 userTemp[0].setId(objSnapshot.getKey());
-                                                if (userTemp[0].getId().equals(id)) {
+                                                if (userTemp[0].getId().equals(id))
+                                                {
                                                     String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
                                                     @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                                                     String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
@@ -371,7 +409,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                                                     Bitmap thumbnail = drawable.getBitmap();
                                                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                                                     thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                                                    bb=bytes.toByteArray();
+                                                    bb = bytes.toByteArray();
 
                                                     sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
                                                     {
@@ -447,10 +485,13 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
 
     ActivityResultLauncher<Intent> startCamera = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
+            new ActivityResultCallback<ActivityResult>()
+            {
                 @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
+                public void onActivityResult(ActivityResult result)
+                {
+                    if (result.getResultCode() == Activity.RESULT_OK)
+                    {
                         Intent data = result.getData();
                         onCaptureResult(data);
                     }
@@ -467,13 +508,17 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         userImage.setImageBitmap(thumbnail);
     }
 
-    public void upAdmin(){
+    public void upAdmin()
+    {
         final Usuarios[] userTemp = new Usuarios[1];
-        for (DataSnapshot objSnapshot : snapshotNew.getChildren()) {
-            if (snapshotNew.exists()) {
+        for (DataSnapshot objSnapshot : snapshotNew.getChildren())
+        {
+            if (snapshotNew.exists())
+            {
                 userTemp[0] = objSnapshot.getValue(Usuarios.class);
                 userTemp[0].setId(objSnapshot.getKey());
-                if (userTemp[0].getId().equals(id)) {
+                if (userTemp[0].getId().equals(id))
+                {
                     databaseReference.child("usuarios").child(id).child("cuenta_empresarial").setValue(true);
                     upUserNivel.setVisibility(View.GONE);
                     Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();

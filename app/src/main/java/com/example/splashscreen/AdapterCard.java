@@ -238,9 +238,16 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
             c = card;
             editbtn.setOnClickListener(v ->
             {
-                Intent intent = new Intent(v.getContext(), DetalleCard.class);
-                v.getContext().startActivity(intent);
-                Toast.makeText(v.getContext(), c.getCuenta(), Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                LayoutInflater inflater1 = inflater;
+                View v1 = inflater.inflate(R.layout.dialog_sugerencias, null);
+                builder.setView(v1);
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+                //Intent intent = new Intent(v.getContext(), DetalleCard.class);
+                //v.getContext().startActivity(intent);
+                //Toast.makeText(v.getContext(), c.getCuenta(), Toast.LENGTH_SHORT).show();
             });
             notify.setOnClickListener(v ->
             {
@@ -251,7 +258,6 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
                 AlertDialog dialog = builder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-
                 ImageButton b = v1.findViewById(R.id.sugerencias_cancel);
                 TextView tvPass, tvSugerencias;
                 tvPass = v1.findViewById(R.id.sugerencias_pass);
@@ -275,15 +281,16 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 LayoutInflater inflater1 = inflater;
                 View v1 = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
-                ImageButton i = v1.findViewById(R.id.imagenC);
+                ImageView i = v1.findViewById(R.id.imagenC);
+
                 builder.setView(v1);
                 AlertDialog dialog = builder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 Picasso.with(inflater.getContext())
-                        .load(card.getImagenFireBase())
-                        .resize(400, 500)
-                        .into(imageView);
+                        .load(c.getImagenFireBase())
+                        .resize(800, 1000)
+                        .into(i);
                 dialog.show();
-
             });
 
         }

@@ -20,13 +20,12 @@
             android:id="@+id/imagenC"
             android:layout_width="350dp"
             android:layout_height="500dp"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
             android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_dialog_close_1"
-            android:translationX="-30dp" />
+            android:src="@drawable/ay" />
 
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

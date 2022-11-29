@@ -2,7 +2,7 @@ package com.example.splashscreen;
 
 public class Usuarios
 {
-    String id, correo, contrasenia, nombre, pregunta, respuesta, img;
+    String id, correo, contrasenia, nombre, pregunta, respuesta, img, ult_login;
     int pin;
     boolean cuenta_empresarial;
 
@@ -22,6 +22,16 @@ public class Usuarios
         this.pin = pin;
         this.cuenta_empresarial = cuenta_empresarial;
         this.img = img;
+    }
+
+    public String getUlt_login()
+    {
+        return ult_login;
+    }
+
+    public void setUlt_login(String ult_login)
+    {
+        this.ult_login = ult_login;
     }
 
     public String getId()

@@ -160,13 +160,6 @@ public class PantallaInicio extends AppCompatActivity
         });
         btn_busca.setOnClickListener(v1 ->
         {
-            if (!busc_cuenta.getText().toString().isEmpty())
-            {
-
-            } else
-            {
-
-            }
             AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(v1.getContext(), "datos_busqueda_individual", null, 1);
             SQLiteDatabase bdd = admin.getWritableDatabase();
             for (int i = 0; i < cardArrayList.size(); i++)
@@ -182,22 +175,23 @@ public class PantallaInicio extends AppCompatActivity
                 registro.put("fecha_ultimo_uso", cardArrayList.get(i).getFecha_ultimo_uso());
                 registro.put("indice", i);
                 bdd.insert("datos_busqueda_individual", null, registro);
-                Cursor fila = bdd.rawQuery("select * from datos_busqueda_individual where cuenta like '%" + busc_cuenta.getText().toString() + "%'", null);
-                ArrayList<Card> cardArrayList_temp = new ArrayList<>();
-                if (fila.moveToFirst())
-                {
-                    do
-                    {
-                        Card card_temp = new Card();
-                        card_temp = cardArrayList.get(fila.getInt(8));
-                        cardArrayList_temp.add(card_temp);
-                    } while (fila.moveToNext());
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(PantallaInicio.this));
-                adapterCard = new AdapterCard(PantallaInicio.this, cardArrayList_temp);
-                recyclerView.setAdapter(adapterCard);
-                recyclerView.setItemAnimator(new CustomItemAnimation());
             }
+            Cursor fila = bdd.rawQuery("select * from datos_busqueda_individual where cuenta like '%" + busc_cuenta.getText().toString() + "%'", null);
+            ArrayList<Card> cardArrayList_temp = new ArrayList<>();
+            if (fila.moveToFirst())
+            {
+                do
+                {
+                    Card card_temp = new Card();
+                    card_temp = cardArrayList.get(fila.getInt(8));
+                    cardArrayList_temp.add(card_temp);
+                } while (fila.moveToNext());
+            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(PantallaInicio.this));
+            adapterCard = new AdapterCard(PantallaInicio.this, cardArrayList_temp);
+            recyclerView.setAdapter(adapterCard);
+            recyclerView.setItemAnimator(new CustomItemAnimation());
+
             int cant = bdd.delete("datos_busqueda_individual", "1=1", null);
             dialog.dismiss();
         });
@@ -228,7 +222,13 @@ public class PantallaInicio extends AppCompatActivity
 
     public void passGen(MenuItem item)
     {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(PantallaInicio.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View v = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
+        builder.setView(v);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     @Override

@@ -32,6 +32,12 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper
                 "fecha_creación text," +
                 "fecha_ultimo_uso text," +
                 "indice int)");
+        BaseDeDatos.execSQL("create table datos_busqueda_emp(" +
+                "id text primary key, " +
+                "correo text," +
+                "img text," +
+                "nombre text," +
+                "indice int)");
     }
 
     @Override

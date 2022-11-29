@@ -22,7 +22,7 @@
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout-v28/custom_toast_error.xml" value="0.20512820512820512" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout-v28/custom_toast_ok.xml" value="0.20512820512820512" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_agregar.xml" value="0.20512820512820512" />
-        <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_datos_usuario.xml" value="0.20512820512820512" />
+        <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_datos_usuario.xml" value="0.4" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_detalle_card.xml" value="0.25" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_emp_agrega_user.xml" value="0.20512820512820512" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_inicio_sesion.xml" value="0.20512820512820512" />
@@ -33,6 +33,7 @@
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/activity_reset_password.xml" value="0.35363247863247865" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/card.xml" value="0.4" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/card_emp.xml" value="0.4" />
+        <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/dialog_busca_emp.xml" value="0.4" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/dialog_personalizado.xml" value="0.2939453125" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/dialog_personalizado2.xml" value="0.25" />
         <entry key="..\:/Users/oscar/Desktop/SplashScreen/app/src/main/res/layout/dialog_personalizado_imagen.xml" value="0.20427350427350427" />

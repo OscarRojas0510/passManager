@@ -4,14 +4,24 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,7 +49,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class inicioSesion extends AppCompatActivity
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+public class inicioSesion extends AppCompatActivity implements LocationListener
 {
     final int CONTADOR_BTN_OLVIDO[] = new int[1];
     final int CONTADOR_BTN_LOGIN[] = new int[1];
@@ -49,6 +64,8 @@ public class inicioSesion extends AppCompatActivity
     TextView tvPass, tvRes;
     Switch sw;
     DatabaseReference databaseReference;
+    private static String gps;
+    final static boolean localizado[] = new boolean[1];
 
 
     @Override
@@ -64,10 +81,6 @@ public class inicioSesion extends AppCompatActivity
         InputPass = findViewById(R.id.inicio_inputLay_pass);
         tvPass = findViewById(R.id.tvContrasenia);
         tvRes = findViewById(R.id.tvRegistro);
-
-        //user.setText("oscarrojasarriagax3@gmail.com");
-        //pass.setText("1234567");
-
         sw = findViewById(R.id.sRecordar);
 
         auth = FirebaseAuth.getInstance();
@@ -127,11 +140,9 @@ public class inicioSesion extends AppCompatActivity
                 }
             }
         });
+        localizado[0] = false;
     }
 
-    //Metodo Alta SQLite
-    //Nombre de la tabla "datos"
-    //Nombre de la base de datos "datos_almaceandos"
     public void registrar()
     {
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "datos_almacenados", null, 1);
@@ -210,19 +221,6 @@ public class inicioSesion extends AppCompatActivity
             {
                 //toastIncorrecto("Dato Inexistente");
             }
-        }
-    }
-
-    //Aqui finaliza metodos de SQLite
-
-    public void click(View view)
-    {
-        if (view.getId() == R.id.sRecordar)
-        {
-            //toastCorrecto("Activado");
-        } else
-        {
-            //toastIncorrecto("Desactivado");
         }
     }
 
@@ -351,32 +349,6 @@ public class inicioSesion extends AppCompatActivity
         finish();
     }
 
-    public void login_2(View view)
-    {
-        if (!user.getText().toString().equals("") && !pass.getText().toString().equals(""))
-        {
-            auth.signInWithEmailAndPassword(user.getText().toString().trim(), pass.getText().toString().trim())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                Intent i = new Intent(inicioSesion.this, PantallaInicio.class);
-                                startActivity(i);
-                            } else
-                            {
-                                Toast.makeText(getApplicationContext(), "Autenticación fallida", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } else
-        {
-            Toast.makeText(this, "Debe llenar los campos", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     @Override
     protected void onDestroy()
     {
@@ -391,8 +363,62 @@ public class inicioSesion extends AppCompatActivity
         finish();
     }
 
+
+    void getLocation()
+    {
+        try
+        {
+            LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            {
+                ActivityCompat.requestPermissions(
+                        inicioSesion.this,
+                        new String[]
+                                {
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                },
+                        100);
+                ActivityCompat.requestPermissions(
+                        inicioSesion.this,
+                        new String[]
+                                {
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                },
+                        100);
+                return;
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, inicioSesion.this);
+        } catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        try
+        {
+            Geocoder geocoder = new Geocoder(inicioSesion.this, Locale.getDefault());
+            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            String address = addressList.get(0).getAddressLine(0);
+            gps = address;
+            iniciar_sesion();
+        } catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //METODO PERRON :V, CHECAR METODO ESTA COMENTADO
     public void login(View view)
+    {
+        Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
+        getLocation();
+
+    }
+
+    public void iniciar_sesion()
     {
         CONTADOR_BTN_LOGIN[0]++;
         if (CONTADOR_BTN_LOGIN[0] <= 1)
@@ -410,6 +436,7 @@ public class inicioSesion extends AppCompatActivity
                                 {
                                     if (task.isSuccessful())
                                     {
+
                                         databaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
                                         final UserObject[] o = new UserObject[1];
                                         databaseReference.addValueEventListener(new ValueEventListener()
@@ -423,6 +450,11 @@ public class inicioSesion extends AppCompatActivity
                                                     String temp = db.getKey();
                                                     if (o[0].getCorreo().equals(user.getText().toString()))
                                                     {
+                                                        Map<String, Object> map = new HashMap<>();
+                                                        map.put("ult_login", gps);
+                                                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                                                        reference.child("usuarios").child(temp).updateChildren(map);
+
                                                         if (o[0].isCuenta_empresarial())
                                                         {
                                                             Intent i = new Intent(inicioSesion.this, PantallaEmpresario.class);
@@ -437,6 +469,7 @@ public class inicioSesion extends AppCompatActivity
                                                             CONTADOR_BTN_LOGIN[0] = 0;
                                                         }
                                                         break;
+
                                                     }
                                                 }
                                                 CONTADOR_BTN_LOGIN[0] = 0;
@@ -449,56 +482,22 @@ public class inicioSesion extends AppCompatActivity
                                             }
                                         });
 
-                                        //toastCorrecto("Inicio de Sesion Existoso");
-
                                     } else
                                     {
                                         CONTADOR_BTN_LOGIN[0] = 0;
                                         Toast.makeText(getApplicationContext(), "Autenticación fallida", Toast.LENGTH_SHORT).show();
-                                        //toastIncorrecto("Error al Iniciar Sesion");
-                                        //El toastIncorrecto se revisara con firebase, si el usuario o contraseña son incorrectos
                                     }
                                 }
                             });
                 } else
                 {
                     CONTADOR_BTN_LOGIN[0] = 0;
-                    //toastIncorrecto("Debe Llenar Todos los Campos");
                 }
             } catch (Exception e)
             {
                 CONTADOR_BTN_LOGIN[0] = 0;
-                //toastIncorrecto("Error, Entre al CATCH del Metodo LOGIN");
             }
         }
-    }
-
-    public void toastCorrecto(String msg)
-    {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.custom_toast_ok, (ViewGroup) findViewById(R.id.ll_custom_toast_ok));
-        TextView txtMsg = view.findViewById(R.id.txtMsgToastOk);
-        txtMsg.setText(msg);
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(view);
-        toast.show();
-    }
-
-    public void toastIncorrecto(String msg)
-    {
-        LayoutInflater layoutInflater = getLayoutInflater();
-        View view = layoutInflater.inflate(R.layout.custom_toast_error, (ViewGroup) findViewById(R.id.ll_custom_toast_error));
-        TextView txtMsg = view.findViewById(R.id.txtMsgToastError);
-        txtMsg.setText(msg);
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.BOTTOM, 0, 200);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(view);
-        toast.show();
     }
 
     private boolean validar()

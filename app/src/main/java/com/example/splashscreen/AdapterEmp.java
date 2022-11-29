@@ -2,6 +2,9 @@ package com.example.splashscreen;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -10,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -28,6 +32,7 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
         this.inflater = LayoutInflater.from(c);
         this.model = model;
     }
+
     //asd
     public void setModel(ArrayList<SubsObject> model)
     {
@@ -54,10 +59,6 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
         holder.correo.setText(card.getCorreo());
         holder.nombre.setText(card.getNombre());
         holder.verbtn.setOnClickListener(v ->
-        {
-
-        });
-        holder.editbtn.setOnClickListener(v ->
         {
 
         });
@@ -103,7 +104,42 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
             editbtn = itemView.findViewById(R.id.cardEmp_edit);
             verbtn = itemView.findViewById(R.id.cardEmp_ver);
             c = card;
+            imageView.setOnClickListener(v ->
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                LayoutInflater inflater1 = inflater;
+                View v1 = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
+                ImageView i = v1.findViewById(R.id.imagenC);
 
+                builder.setView(v1);
+                AlertDialog dialog = builder.create();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Picasso.with(inflater.getContext())
+                        .load(c.getImg())
+                        .resize(800, 1000)
+                        .into(i);
+                dialog.show();
+            });
+            editbtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent i = new Intent(v.getContext(), DatosUsuario.class);
+                    i.putExtra("key", c.getId());
+                    i.putExtra("ventana", 5);
+                    i.putExtra("keya", c.getAdmin());
+                    v.getContext().startActivity(i);
+                }
+            });
+            verbtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+
+                }
+            });
         }
     }
 }
