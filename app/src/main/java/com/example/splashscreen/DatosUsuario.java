@@ -44,6 +44,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,8 +80,11 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     DatabaseReference databaseReference;
     private StorageReference mstorage;
 
+    DataSnapshot objSnapshotNew;
+
     private StorageReference mstorageRef;
     private static byte bb[];
+    DataSnapshot snapshotNew;
 
     @SuppressLint("WrongThread")
     @Override
@@ -97,6 +101,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         bb=bytes.toByteArray();
+        mstorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     private void componentes()
@@ -155,16 +160,19 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
+                snapshotNew=snapshot;
                 int cont = 0;
                 final Usuarios[] userTemp = new Usuarios[1];
                 for (DataSnapshot objSnapshot : snapshot.getChildren())
                 {
+                    objSnapshotNew=objSnapshot;
                     if (snapshot.exists())
                     {
                         userTemp[0] = objSnapshot.getValue(Usuarios.class);
                         userTemp[0].setId(objSnapshot.getKey());
                         if (userTemp[0].getId().equals(id))
                         {
+                            Toast.makeText(DatosUsuario.this,id,Toast.LENGTH_SHORT);
                             correoUserDB = userTemp[0].getCorreo();
                             passwordDB = desencriptar(userTemp[0].getContrasenia());
                             userDB = userTemp[0].getNombre();
@@ -334,80 +342,40 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                     {
                         if (task.isSuccessful())
                         {
-                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>()
-                            {
+                            auth.getCurrentUser().updatePassword(password.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task)
-                                {
-                                    if (task.isSuccessful())
-                                    {
-
-                                        DatabaseReference firebaseDataBase;
-                                        firebaseDataBase = FirebaseDatabase.getInstance().getReference().child("usuarios");
-                                        firebaseDataBase.setValue(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot)
-                                            {
-                                                int cont = 0;
-                                                final Usuarios[] userTemp = new Usuarios[1];
-                                                for (DataSnapshot objSnapshot : snapshot.getChildren())
-                                                {
-                                                    if (snapshot.exists())
+                                public void onSuccess(Void unused) {
+                                    final Usuarios[] userTemp = new Usuarios[1];
+                                    if (task.isSuccessful()) {
+                                        for (DataSnapshot objSnapshot : snapshotNew.getChildren()) {
+                                            if (snapshotNew.exists()) {
+                                                userTemp[0] = objSnapshot.getValue(Usuarios.class);
+                                                userTemp[0].setId(objSnapshot.getKey());
+                                                if (userTemp[0].getId().equals(id)) {
+                                                    String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
+                                                    @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                                                    String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
+                                                    StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+                                                    sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
                                                     {
-                                                        userTemp[0] = objSnapshot.getValue(Usuarios.class);
-                                                        userTemp[0].setId(objSnapshot.getKey());
-                                                        if (userTemp[0].getId().equals(id))
-                                                        {
-                                                            userTemp[0].setCorreo(correoAdd);
-                                                            userTemp[0].setContrasenia(password.getText().toString());
-                                                            userTemp[0].setNombre(userAdd);
-                                                            userTemp[0].setPregunta(questAdd);
-                                                            userTemp[0].setRespuesta(resAdd);
-                                                            userTemp[0].setPin(pinAdd);
-                                                            String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
-                                                            @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                                                            String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
-                                                            StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
-                                                            sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
-                                                            {
-                                                                imgurl = String.valueOf(uri);
-                                                                userTemp[0].setImg(imgurl);
-                                                                cancel.performClick();
-                                                                Toast.makeText(DatosUsuario.this, "Registro existoso", Toast.LENGTH_SHORT).show();
-                                                            }).addOnFailureListener(e ->
-                                                            {
-                                                                Toast.makeText(DatosUsuario.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
-                                                            }));
-                                                            //nivelDB = "" + userTemp[0].isCuenta_empresarial();
+                                                        imgurl = String.valueOf(uri);
 
-                                                            // img = cursor.getString(9);
-                                                            correoUser.setText(correoUserDB);
-                                                            user.setText(userDB);
-                                                            password.setText(passwordDB);
-                                                            confPassword.setText(passwordDB);
-                                                            pin.setText(pinDB);
-                                                            quest.setText(questDB);
-                                                            res.setText(resDB);
-                                                            Picasso.with(DatosUsuario.this).load(imgurl).into(userImage);
-                                                        }
-
-                                                    }
+                                                        databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
+                                                        databaseReference.child("usuarios").child(id).child("contrasenia").setValue(passwordAdd);
+                                                        databaseReference.child("usuarios").child(id).child("pin").setValue(pinAdd);
+                                                        databaseReference.child("usuarios").child(id).child("pregunta").setValue(questAdd);
+                                                        databaseReference.child("usuarios").child(id).child("respuesta").setValue(resAdd);
+                                                        databaseReference.child("usuarios").child(id).child("img").setValue(imgurl);
+                                                        Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();
+                                                        editBox(false);
+                                                    }).addOnFailureListener(e ->
+                                                    {
+                                                        Toast.makeText(DatosUsuario.this, "fallo en imagen . . ." + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    }));
                                                 }
 
                                             }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error)
-                                            {
-
-                                            }
-                                        });
-                                        /*databaseReference.child("usuarios").child(id).child("nombre").setValue(userAdd);
-                                        databaseReference.child("usuarios").child(id).child("contrasenia").setValue(passwordAdd);
-                                        databaseReference.child("usuarios").child(id).child("pin").setValue(pinAdd);
-                                        databaseReference.child("usuarios").child(id).child("pregunta").setValue(questAdd);
-                                        databaseReference.child("usuarios").child(id).child("respuesta").setValue(resAdd);
-                                        Toast.makeText(DatosUsuario.this, "Cambios realizados con exito", Toast.LENGTH_SHORT).show();*/
+                                        }
                                     } else
                                     {
                                         Toast.makeText(DatosUsuario.this, "Algo malo paso", Toast.LENGTH_SHORT).show();
@@ -424,7 +392,6 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(DatosUsuario.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 });
-                cancel.performClick();
             } else
             {
                 Toast.makeText(v.getContext(), "Complete los campos", Toast.LENGTH_LONG).show();
@@ -477,7 +444,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
     {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         bb = bytes.toByteArray();
         //String file = Base64.encodeToString(bb, Base64.DEFAULT);
         userImage.setImageBitmap(thumbnail);

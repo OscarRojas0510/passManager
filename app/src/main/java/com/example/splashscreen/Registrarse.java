@@ -167,6 +167,7 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
                         databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
+
                                 cancelar.performClick();
                                 Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
                                 abrirInicioSesión();
