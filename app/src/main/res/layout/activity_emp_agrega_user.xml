@@ -5,16 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_login"
-    tools:context=".Registrarse">
+    android:fitsSystemWindows="false"
+    tools:context=".EmpAgregaUser">
 
-    <!--
-    okiteGAYmi estuvo aqui
-    -->
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
-        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,14 +31,13 @@
                 android:gravity="center">
 
                 <androidx.constraintlayout.utils.widget.ImageFilterView
-                    android:id="@+id/userImage"
+                    android:id="@+id/EmpAgregaUser_Image"
                     android:layout_width="196dp"
                     android:layout_height="189dp"
                     android:layout_gravity="center"
                     android:src="@drawable/user"
                     app:srcCompat="@drawable/user"
-                    tools:srcCompat="@drawable/user"
-                    >
+                    tools:srcCompat="@drawable/user">
 
                 </androidx.constraintlayout.utils.widget.ImageFilterView>
 
@@ -261,6 +258,5 @@
 
         </LinearLayout>
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

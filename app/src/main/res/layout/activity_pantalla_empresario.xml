@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:elevation="15dp"
             tools:layout_editor_absoluteX="14dp"
-            tools:layout_editor_absoluteY="184dp" />
+            tools:layout_editor_absoluteY="184dp"/>
     </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar

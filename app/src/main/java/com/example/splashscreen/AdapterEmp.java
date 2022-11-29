@@ -28,7 +28,7 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
         this.inflater = LayoutInflater.from(c);
         this.model = model;
     }
-
+    //asd
     public void setModel(ArrayList<SubsObject> model)
     {
         this.model = model;
