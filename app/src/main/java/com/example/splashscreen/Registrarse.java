@@ -146,28 +146,29 @@ public class Registrarse extends AppCompatActivity implements View.OnClickListen
 
     public void registro()
     {
-        String corr = correo.getText().toString().trim();
-        String passw = pass.getText().toString().trim();
-        auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>()
+        if (bb != null)
         {
-            @Override
-            public void onSuccess(AuthResult authResult)
+            String corr = correo.getText().toString().trim();
+            String passw = pass.getText().toString().trim();
+            auth.createUserWithEmailAndPassword(corr, passw).addOnSuccessListener(new OnSuccessListener<AuthResult>()
             {
-                String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
-                @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
-                StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
-                sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                @Override
+                public void onSuccess(AuthResult authResult)
                 {
-                    imgurl = String.valueOf(uri);
-                    image=true;
+                    String tostcuenta = user.getText().toString().substring(0, 1) + user.getText().toString().substring(user.getText().toString().length() - 1);
+                    @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String nomarch = tostcuenta + user.getText().hashCode() + timeStamp;
+                    StorageReference sr = mstorageRef.child("imagesPass/" + nomarch);
+                    sr.putBytes(bb).addOnSuccessListener(taskSnapshot -> sr.getDownloadUrl().addOnSuccessListener(uri ->
+                    {
+                        imgurl = String.valueOf(uri);
+                        image = true;
 
                     if (image){
                         userNew.setImg(imgurl);
                         databaseReference.child("usuarios").push().setValue(userNew).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-
                                 cancelar.performClick();
                                 Toast.makeText(Registrarse.this, "Registro existoso", Toast.LENGTH_SHORT).show();
                                 abrirInicioSesión();

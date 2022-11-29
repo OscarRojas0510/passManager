@@ -168,6 +168,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
             }
         }
 
+
         int diag1 = card.getFecha_creación().indexOf("/");
         int diag2 = card.getFecha_creación().substring(diag1 + 1).indexOf("/") + diag1 + 1;
         String fechacard = card.getFecha_creación();
@@ -188,6 +189,7 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
                 .load(card.getImagenFireBase())
                 .resize(400, 500)
                 .into(holder.imageView);
+
     }
 
     @Override
@@ -267,6 +269,21 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
                 {
                     dialog.dismiss();
                 });
+            });
+            imageView.setOnClickListener(v ->
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                LayoutInflater inflater1 = inflater;
+                View v1 = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
+                ImageButton i = v1.findViewById(R.id.imagenC);
+                builder.setView(v1);
+                AlertDialog dialog = builder.create();
+                Picasso.with(inflater.getContext())
+                        .load(card.getImagenFireBase())
+                        .resize(400, 500)
+                        .into(imageView);
+                dialog.show();
+
             });
 
         }

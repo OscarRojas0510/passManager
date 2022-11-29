@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id='@+id/Empcv'
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@android:color/transparent"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/cardEmpFoto"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="5"
+                android:scaleType="fitCenter"
+                android:src="@drawable/user" />
+
+            <LinearLayout
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Correo"
+                    android:textColorHint="@color/inversoDeg"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/inversoDeg"
+                    app:hintTextColor="@color/inversoDeg">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cardEmpCorreo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:textColor="@color/inversoDeg" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre"
+                    android:textColorHint="@color/inversoDeg"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/inversoDeg"
+                    app:hintTextColor="@color/inversoDeg">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cardEmpPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:textColor="@color/inversoDeg" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="fill"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="5"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cardEmp_ver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    app:icon="@drawable/ic_baseline_remove_red_eye_24"
+                    app:iconGravity="textEnd"
+                    app:iconTint="@color/inversoDeg" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cardEmp_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:backgroundTint="@android:color/transparent"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    app:icon="@drawable/ic_card_edit"
+                    app:iconGravity="textEnd"
+                    app:iconTint="@color/inversoDeg" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -24,6 +24,12 @@
         android:theme="@style/Theme.SplashScreen"
         tools:targetApi="31">
         <activity
+            android:name=".EmpAgregaUser"
+            android:exported="false" />
+        <activity
+            android:name=".PantallaEmpresario"
+            android:exported="false" />
+        <activity
             android:name=".DatosUsuario"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

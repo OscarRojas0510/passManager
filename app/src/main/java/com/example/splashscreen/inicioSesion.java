@@ -346,6 +346,7 @@ public class inicioSesion extends AppCompatActivity
         i.putExtra("pin", o.getPin());
         i.putExtra("pregunta", o.getPregunta());
         i.putExtra("respuesta", o.getRespuesta());
+        i.putExtra("img", o.getImg());
         startActivity(i);
         finish();
     }
@@ -422,10 +423,19 @@ public class inicioSesion extends AppCompatActivity
                                                     String temp = db.getKey();
                                                     if (o[0].getCorreo().equals(user.getText().toString()))
                                                     {
-                                                        Intent i = new Intent(inicioSesion.this, PantallaInicio.class);
-                                                        i.putExtra("key", temp);
-                                                        startActivity(i);
-                                                        CONTADOR_BTN_LOGIN[0] = 0;
+                                                        if (o[0].isCuenta_empresarial())
+                                                        {
+                                                            Intent i = new Intent(inicioSesion.this, PantallaEmpresario.class);
+                                                            i.putExtra("key", temp);
+                                                            startActivity(i);
+                                                            CONTADOR_BTN_LOGIN[0] = 0;
+                                                        } else
+                                                        {
+                                                            Intent i = new Intent(inicioSesion.this, PantallaInicio.class);
+                                                            i.putExtra("key", temp);
+                                                            startActivity(i);
+                                                            CONTADOR_BTN_LOGIN[0] = 0;
+                                                        }
                                                         break;
                                                     }
                                                 }

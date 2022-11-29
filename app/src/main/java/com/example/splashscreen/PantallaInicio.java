@@ -77,7 +77,6 @@ public class PantallaInicio extends AppCompatActivity
         adapterCard = new AdapterCard(PantallaInicio.this, cardArrayList);
         recyclerView.setAdapter(adapterCard);
         recyclerView.setItemAnimator(new CustomItemAnimation());
-
     }
 
     private void cargarLista()
