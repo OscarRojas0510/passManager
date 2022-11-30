@@ -238,16 +238,15 @@ public class AdapterCard extends RecyclerView.Adapter<AdapterCard.ViewHolder>
             c = card;
             editbtn.setOnClickListener(v ->
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                LayoutInflater inflater1 = inflater;
-                View v1 = inflater.inflate(R.layout.dialog_sugerencias, null);
-                builder.setView(v1);
-                AlertDialog dialog = builder.create();
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-                //Intent intent = new Intent(v.getContext(), DetalleCard.class);
-                //v.getContext().startActivity(intent);
-                //Toast.makeText(v.getContext(), c.getCuenta(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), Modificar.class);
+                intent.putExtra("key", c.id_user);
+                intent.putExtra("keypw", c.id);
+                intent.putExtra("cuenta", c.getCuenta());
+                intent.putExtra("usr", c.getUser());
+                intent.putExtra("pw", c.getPassword());
+                intent.putExtra("img", c.getImagenFireBase());
+                v.getContext().startActivity(intent);
+                Toast.makeText(v.getContext(), c.getCuenta(), Toast.LENGTH_SHORT).show();
             });
             notify.setOnClickListener(v ->
             {
