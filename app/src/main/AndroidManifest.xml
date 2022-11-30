@@ -29,10 +29,6 @@
             android:name=".EmpAgregaUser"
             android:exported="false" />
         <activity
-            android:name=".Modificar"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity
             android:name=".PantallaEmpresario"
             android:exported="false" />
         <activity

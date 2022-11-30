@@ -66,7 +66,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     DatabaseReference databaseReference;
     private static String gps;
     final static boolean localizado[] = new boolean[1];
-    private static int contgps;
 
 
     @Override
@@ -83,7 +82,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         tvPass = findViewById(R.id.tvContrasenia);
         tvRes = findViewById(R.id.tvRegistro);
         sw = findViewById(R.id.sRecordar);
-        contgps = 0;
 
         auth = FirebaseAuth.getInstance();
 
@@ -351,7 +349,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         finish();
     }
 
-    //si quieres magia, borra este metodo
     @Override
     protected void onDestroy()
     {
@@ -359,7 +356,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         finish();
     }
 
-    //si quieres magia, borra este metodo
     @Override
     protected void onPause()
     {
@@ -407,11 +403,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
             List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             String address = addressList.get(0).getAddressLine(0);
             gps = address;
-            contgps++;
-            if (contgps <= 1)
-            {
-                iniciar_sesion();
-            }
+            iniciar_sesion();
         } catch (Exception e)
         {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
