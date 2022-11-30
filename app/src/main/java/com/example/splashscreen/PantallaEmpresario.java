@@ -203,6 +203,7 @@ public class PantallaEmpresario extends AppCompatActivity
     protected void onPause()
     {
         super.onPause();
+        Toast.makeText(this, "pause", Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -210,6 +211,7 @@ public class PantallaEmpresario extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
+        Toast.makeText(this, "destroy", Toast.LENGTH_LONG).show();
         finish();
     }
 }

@@ -66,7 +66,8 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     DatabaseReference databaseReference;
     private static String gps;
     final static boolean localizado[] = new boolean[1];
-
+    private static int contgps;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,6 +83,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         tvPass = findViewById(R.id.tvContrasenia);
         tvRes = findViewById(R.id.tvRegistro);
         sw = findViewById(R.id.sRecordar);
+        contgps = 0;
 
         auth = FirebaseAuth.getInstance();
 
@@ -349,26 +351,12 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         finish();
     }
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        finish();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        finish();
-    }
-
 
     void getLocation()
     {
         try
         {
-            LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
                 ActivityCompat.requestPermissions(
@@ -399,11 +387,17 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     {
         try
         {
-            Geocoder geocoder = new Geocoder(inicioSesion.this, Locale.getDefault());
-            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            String address = addressList.get(0).getAddressLine(0);
-            gps = address;
-            iniciar_sesion();
+            Toast.makeText(this, contgps, Toast.LENGTH_LONG).show();
+            contgps++;
+            if (contgps <= 1)
+            {
+                Geocoder geocoder = new Geocoder(inicioSesion.this, Locale.getDefault());
+                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                String address = addressList.get(0).getAddressLine(0);
+                gps = address;
+                iniciar_sesion();
+            }
+            location = null;
         } catch (Exception e)
         {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -413,9 +407,9 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     //METODO PERRON :V, CHECAR METODO ESTA COMENTADO
     public void login(View view)
     {
-        Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
-        getLocation();
-
+        //Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
+        //getLocation();
+        iniciar_sesion();
     }
 
     public void iniciar_sesion()
