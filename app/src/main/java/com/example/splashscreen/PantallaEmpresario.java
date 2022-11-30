@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -77,7 +78,7 @@ public class PantallaEmpresario extends AppCompatActivity
                         o[0].setAdmin(key);
                         cardArrayList.add(o[0]);
                     }
-                    mostrarDatos();
+                    //mostrarDatos();
                 }
             }
 
@@ -105,6 +106,7 @@ public class PantallaEmpresario extends AppCompatActivity
         i.putExtra("ventana", 4);
         startActivity(i);
     }
+
 
     //boton icono busca de la barra inferior
     public void empBuscar(MenuItem item)
@@ -196,22 +198,6 @@ public class PantallaEmpresario extends AppCompatActivity
         super.onBackPressed();
         Intent i = new Intent(PantallaEmpresario.this, inicioSesion.class);
         startActivity(i);
-        finish();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        Toast.makeText(this, "pause", Toast.LENGTH_LONG).show();
-        finish();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        Toast.makeText(this, "destroy", Toast.LENGTH_LONG).show();
         finish();
     }
 }

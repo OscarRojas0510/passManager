@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -232,16 +233,21 @@ public class PantallaInicio extends AppCompatActivity
     }
 
     @Override
-    protected void onPause()
+    public void onContentChanged()
     {
-        super.onPause();
-        finish();
+        super.onContentChanged();
+
     }
 
     @Override
     protected void onDestroy()
     {
         super.onDestroy();
-        finish();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
     }
 }

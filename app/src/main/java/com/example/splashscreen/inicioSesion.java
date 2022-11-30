@@ -67,7 +67,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     private static String gps;
     final static boolean localizado[] = new boolean[1];
     private static int contgps;
-    LocationManager locationManager;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -376,6 +376,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
                 return;
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, inicioSesion.this);
+
         } catch (Exception e)
         {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -387,7 +388,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     {
         try
         {
-            Toast.makeText(this, contgps, Toast.LENGTH_LONG).show();
             contgps++;
             if (contgps <= 1)
             {
@@ -396,8 +396,8 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
                 String address = addressList.get(0).getAddressLine(0);
                 gps = address;
                 iniciar_sesion();
+                locationManager.removeUpdates(inicioSesion.this);
             }
-            location = null;
         } catch (Exception e)
         {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -407,9 +407,9 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     //METODO PERRON :V, CHECAR METODO ESTA COMENTADO
     public void login(View view)
     {
-        //Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
-        //getLocation();
-        iniciar_sesion();
+        Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
+        getLocation();
+        // iniciar_sesion();
     }
 
     public void iniciar_sesion()
@@ -417,7 +417,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         CONTADOR_BTN_LOGIN[0]++;
         if (CONTADOR_BTN_LOGIN[0] <= 1)
         {
-            Toast.makeText(this, "validando", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "encontrado... validando", Toast.LENGTH_SHORT).show();
             try
             {
                 if (validar())
@@ -430,7 +430,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
                                 {
                                     if (task.isSuccessful())
                                     {
-
                                         databaseReference = FirebaseDatabase.getInstance().getReference().child("usuarios");
                                         final UserObject[] o = new UserObject[1];
                                         databaseReference.addValueEventListener(new ValueEventListener()
