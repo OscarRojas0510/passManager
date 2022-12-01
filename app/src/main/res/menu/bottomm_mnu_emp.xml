@@ -5,7 +5,7 @@
         android:id="@+id/mnuEmp_user"
         android:icon="@drawable/ic_user_info"
         android:onClick="empUserinf"
-        android:title="usuario"
+        android:title="mi cuenta"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mnuEmp_buscar"
@@ -24,6 +24,6 @@
         android:id="@+id/mnuEmp_pass_gen"
         android:icon="@drawable/ic_pass_gen"
         android:onClick="empPassGen"
-        android:title="generar"
+        android:title="contraseñas"
         app:showAsAction="ifRoom" />
 </menu>

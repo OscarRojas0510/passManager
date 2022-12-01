@@ -58,10 +58,6 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
                 .into(holder.imageView);
         holder.correo.setText(card.getCorreo());
         holder.nombre.setText(card.getNombre());
-        holder.verbtn.setOnClickListener(v ->
-        {
-
-        });
     }
 
     @Override
@@ -92,7 +88,7 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
     {
         SubsObject c;
         EditText correo, nombre;
-        MaterialButton editbtn, verbtn;
+        MaterialButton editbtn;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView)
@@ -102,7 +98,6 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
             correo = itemView.findViewById(R.id.cardEmpCorreo);
             nombre = itemView.findViewById(R.id.cardEmpPass);
             editbtn = itemView.findViewById(R.id.cardEmp_edit);
-            verbtn = itemView.findViewById(R.id.cardEmp_ver);
             c = card;
             imageView.setOnClickListener(v ->
             {
@@ -130,14 +125,6 @@ public class AdapterEmp extends RecyclerView.Adapter<AdapterEmp.ViewHolder>
                     i.putExtra("ventana", 5);
                     i.putExtra("keya", c.getAdmin());
                     v.getContext().startActivity(i);
-                }
-            });
-            verbtn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-
                 }
             });
         }

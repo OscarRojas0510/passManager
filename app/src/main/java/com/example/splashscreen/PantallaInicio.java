@@ -47,6 +47,7 @@ public class PantallaInicio extends AppCompatActivity
     BottomNavigationView bottomNavigationView;
     ArrayList<Card> cardArrayList;
     String key;
+    int ventana;
     DatabaseReference databaseReference;
 
     @Override
@@ -63,7 +64,11 @@ public class PantallaInicio extends AppCompatActivity
         recyclerView = findViewById(R.id.inicio_Recycler);
         cardArrayList = new ArrayList<>();
         key = getIntent().getStringExtra("key");
+        ventana = 0;
+        ventana = getIntent().getIntExtra("ventana", 0);
         cargarLista();
+
+
     }
 
     @Override
@@ -200,7 +205,8 @@ public class PantallaInicio extends AppCompatActivity
 
     public void logout(MenuItem item)
     {
-        Intent i = new Intent(PantallaInicio.this, MainActivity.class);
+
+        Intent i = new Intent(PantallaInicio.this, inicioSesion.class);
         startActivity(i);
         finish();
     }
@@ -209,8 +215,16 @@ public class PantallaInicio extends AppCompatActivity
     public void onBackPressed()
     {
         super.onBackPressed();
-        Intent i = new Intent(PantallaInicio.this, MainActivity.class);
-        startActivity(i);
+        if (ventana == 4)
+        {
+            Intent i = new Intent(PantallaInicio.this, PantallaEmpresario.class);
+            i.putExtra("key", key);
+            startActivity(i);
+        } else
+        {
+            Intent i = new Intent(PantallaInicio.this, inicioSesion.class);
+            startActivity(i);
+        }
         finish();
     }
 
@@ -218,6 +232,7 @@ public class PantallaInicio extends AppCompatActivity
     {
         Intent i = new Intent(PantallaInicio.this, DatosUsuario.class);
         i.putExtra("key", key);
+        i.putExtra("ventana", ventana);
         startActivity(i);
     }
 
@@ -230,24 +245,5 @@ public class PantallaInicio extends AppCompatActivity
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
-    }
-
-    @Override
-    public void onContentChanged()
-    {
-        super.onContentChanged();
-
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
     }
 }

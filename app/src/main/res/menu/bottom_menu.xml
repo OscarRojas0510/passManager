@@ -5,7 +5,7 @@
         android:id="@+id/mnu_user"
         android:icon="@drawable/ic_user_info"
         android:onClick="userinf"
-        android:title="usuario"
+        android:title="mi cuenta"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/mnu_buscar"

@@ -91,6 +91,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
         componentes();
         id = getIntent().getStringExtra("key");
         keya = getIntent().getStringExtra("keya");
+        ventana = 0;
         ventana = getIntent().getIntExtra("ventana", 0);
         getUserDB();
         userImage = findViewById(R.id.userImageAct);
@@ -234,6 +235,7 @@ public class DatosUsuario extends AppCompatActivity implements View.OnClickListe
                     {
                         Intent i = new Intent(DatosUsuario.this, PantallaInicio.class);
                         i.putExtra("key", id);
+                        i.putExtra("ventana", ventana);
                         startActivity(i);
                     }
                 }

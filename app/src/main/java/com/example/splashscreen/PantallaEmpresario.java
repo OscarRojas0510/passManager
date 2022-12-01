@@ -78,7 +78,7 @@ public class PantallaEmpresario extends AppCompatActivity
                         o[0].setAdmin(key);
                         cardArrayList.add(o[0]);
                     }
-                    //mostrarDatos();
+                    mostrarDatos();
                 }
             }
 
@@ -174,13 +174,10 @@ public class PantallaEmpresario extends AppCompatActivity
     //boton icono llave de la barra inferior
     public void empPassGen(MenuItem item)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PantallaEmpresario.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View v = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
-        builder.setView(v);
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
+        Intent intent = new Intent(PantallaEmpresario.this, PantallaInicio.class);
+        intent.putExtra("key", key);
+        intent.putExtra("ventana", 4);
+        startActivity(intent);
     }
 
     //botón circular inferior

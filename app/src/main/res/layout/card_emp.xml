@@ -94,23 +94,11 @@
                 android:layout_weight="5"
                 android:gravity="center"
                 android:orientation="vertical">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cardEmp_ver"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:backgroundTint="@android:color/transparent"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    app:icon="@drawable/ic_baseline_remove_red_eye_24"
-                    app:iconGravity="textEnd"
-                    app:iconTint="@color/inversoDeg" />
-
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cardEmp_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    app:cornerRadius="10dp"
                     android:layout_gravity="fill"
                     android:backgroundTint="@android:color/transparent"
                     android:gravity="center"

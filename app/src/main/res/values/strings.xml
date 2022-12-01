@@ -7,4 +7,5 @@
     <string name="iniciar_sesion_1">Iniciar Sesion</string>
     <string name="resgistrarse">Resgistrarse</string>
     <string name="olvid_mi_contrase_a">Olvidé mi contraseña</string>
+    <string name="title_activity_mapa">Mapa</string>
 </resources>
