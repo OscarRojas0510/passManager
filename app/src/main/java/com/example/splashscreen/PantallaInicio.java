@@ -242,7 +242,7 @@ public class PantallaInicio extends AppCompatActivity
         View v = inflater.inflate(R.layout.dialog_generapass, null);
         builder.setView(v);
         TextView ediPass = v.findViewById(R.id.txtPass);
-        String password=generarPass(9,65,122);
+        String password=generarPass(9,48,122);
         ediPass.setText(password);
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
