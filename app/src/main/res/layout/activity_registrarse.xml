@@ -181,6 +181,7 @@
                     android:id="@+id/refPin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="4"
                     android:inputType="numberPassword"
                     android:textColor="@color/white" />
             </com.google.android.material.textfield.TextInputLayout>
