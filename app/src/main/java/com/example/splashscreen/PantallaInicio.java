@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -24,21 +26,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class PantallaInicio extends AppCompatActivity
 {
@@ -240,10 +239,45 @@ public class PantallaInicio extends AppCompatActivity
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(PantallaInicio.this);
         LayoutInflater inflater = getLayoutInflater();
-        View v = inflater.inflate(R.layout.dialog_personalizado_imagen, null);
+        View v = inflater.inflate(R.layout.dialog_generapass, null);
         builder.setView(v);
+        TextView ediPass = v.findViewById(R.id.txtPass);
+        String password=generarPass(9,65,122);
+        ediPass.setText(password);
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+        ImageButton b = v.findViewById(R.id.btncerrar);
+        b.setOnClickListener(v1 ->
+        {
+            dialog.dismiss();
+        });
+
+
+        Button btnComprar = v.findViewById(R.id.btnCopiar);
+        btnComprar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText pass = v.findViewById(R.id.txtPass);
+             //   String text =pass.getText().toString();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("text", password);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(PantallaInicio.this,"Copiado", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+            }
+        });
     }
+
+    /* Metodo para generar una contraseña con todas las letras en minúsculas y numeros, en
+    un rango como se recomienda usar 48-122 para usar el Valor ASCII de 0-9, 'A'-'Z' y 'a'-'z'. */
+    public static String generarPass(int tam, int inicio, int fin)
+    {
+        SecureRandom aleatorio = new SecureRandom();
+        return aleatorio.ints(tam, inicio, fin + 1)
+                .mapToObj(i -> String.valueOf((char)i))
+                .collect(Collectors.joining());
+    }
+
 }

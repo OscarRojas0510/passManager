@@ -1,40 +1,25 @@
 package com.example.splashscreen;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,8 +35,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class inicioSesion extends AppCompatActivity
@@ -235,14 +218,14 @@ public class inicioSesion extends AppCompatActivity
                                     {
                                         CONTADOR_BTN_OLVIDO[0] = 0;
                                     });
-                                    ImageButton b = v.findViewById(R.id.olvido_cancel);
+                                    ImageButton b = v.findViewById(R.id.btncerrar);
                                     b.setOnClickListener(v1 ->
                                     {
                                         dialog.dismiss();
                                         CONTADOR_BTN_OLVIDO[0] = 0;
                                     });
-                                    MaterialButton btnOk = v.findViewById(R.id.olvido_ok);
-                                    EditText respuesta = v.findViewById(R.id.olvido_RespPregunta);
+                                    MaterialButton btnOk = v.findViewById(R.id.btnCopiar);
+                                    EditText respuesta = v.findViewById(R.id.txtPass);
                                     TextInputLayout ilRespuesta = v.findViewById(R.id.dialog_olvido_textilResp);
 
                                     btnOk.setOnClickListener(new View.OnClickListener()
