@@ -38,6 +38,8 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper
                 "img text," +
                 "nombre text," +
                 "indice int)");
+
+        BaseDeDatos.execSQL("create table datos_gps(ubicacion text)");
     }
 
     @Override

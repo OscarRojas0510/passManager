@@ -54,39 +54,32 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class inicioSesion extends AppCompatActivity implements LocationListener
+public class inicioSesion extends AppCompatActivity
 {
     final int CONTADOR_BTN_OLVIDO[] = new int[1];
     final int CONTADOR_BTN_LOGIN[] = new int[1];
     EditText user, pass;
     FirebaseAuth auth;
     private TextInputLayout InputUser, InputPass;
-    TextView tvPass, tvRes;
     Switch sw;
     DatabaseReference databaseReference;
-    private static String gps;
-    final static boolean localizado[] = new boolean[1];
-    private static int contgps;
-    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio_sesion);
-        CONTADOR_BTN_OLVIDO[0] = 0;
-        CONTADOR_BTN_LOGIN[0] = 0;
         user = findViewById(R.id.etUsuario);
         pass = findViewById(R.id.etPass);
         InputUser = findViewById(R.id.inicio_inputLay_correo);
         InputPass = findViewById(R.id.inicio_inputLay_pass);
-        tvPass = findViewById(R.id.tvContrasenia);
-        tvRes = findViewById(R.id.tvRegistro);
         sw = findViewById(R.id.sRecordar);
-        contgps = 0;
+
+        buscar();
+        CONTADOR_BTN_OLVIDO[0] = 0;
+        CONTADOR_BTN_LOGIN[0] = 0;
 
         auth = FirebaseAuth.getInstance();
-
         user.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -127,7 +120,6 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
 
             }
         });
-        buscar();
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -142,29 +134,22 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
                 }
             }
         });
-        localizado[0] = false;
     }
 
     public void registrar()
     {
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "datos_almacenados", null, 1);
         SQLiteDatabase bdd = admin.getWritableDatabase();
-
         String email = user.getText().toString();
         String con = pass.getText().toString();
-
         if (!email.isEmpty() && !con.isEmpty())
         {
             ContentValues registro = new ContentValues();
             registro.put("codigo", 1);
             registro.put("email", email);
             registro.put("password", con);
-
             bdd.insert("datos_almacenados", null, registro);
-
             bdd.close();
-
-            //toastCorrecto("Guardado Exitoso");
         } else
         {
             validar();
@@ -172,31 +157,21 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         }
     }
 
-    //Metodo para consultar
     public void buscar()
     {
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "datos_almacenados", null, 1);
         SQLiteDatabase bdd = admin.getWritableDatabase();
-
-        int codigo = 1;
-        if (codigo != 1)
+        Cursor fila = bdd.rawQuery("select email, password from datos_almacenados where codigo = 1", null);
+        if (fila.moveToFirst())
         {
-            //toastIncorrecto("Error al Buscar");
+            user.setText(fila.getString(0));
+            pass.setText(fila.getString(1));
+            bdd.close();
+            sw.setChecked(true);
         } else
         {
-            Cursor fila = bdd.rawQuery("select email, password from datos_almacenados where codigo = " + codigo, null);
-            if (fila.moveToFirst())
-            {
-                user.setText(fila.getString(0));
-                pass.setText(fila.getString(1));
-                bdd.close();
-                sw.setChecked(true);
-            } else
-            {
-                //toastIncorrecto("El Dato no Existe");
-                bdd.close();
-                sw.setChecked(false);
-            }
+            bdd.close();
+            sw.setChecked(false);
         }
     }
 
@@ -205,25 +180,8 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
     {
         AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "datos_almacenados", null, 1);
         SQLiteDatabase bdd = admin.getWritableDatabase();
-
-        int codigo = 1;
-
-        if (codigo != 1)
-        {
-            //toastIncorrecto("Error al Eliminar");
-        } else
-        {
-            int cantidad = bdd.delete("datos_almacenados", "codigo = " + codigo, null);
-            bdd.close();
-
-            if (cantidad == 1)
-            {
-                //toastCorrecto("Eliminacion Existosa");
-            } else
-            {
-                //toastIncorrecto("Dato Inexistente");
-            }
-        }
+        bdd.delete("datos_almacenados", "1 = 1", null);
+        bdd.close();
     }
 
     public void registro(View view)
@@ -351,68 +309,7 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
         finish();
     }
 
-
-    void getLocation()
-    {
-        try
-        {
-            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            {
-                ActivityCompat.requestPermissions(
-                        inicioSesion.this,
-                        new String[]
-                                {
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                },
-                        100);
-                ActivityCompat.requestPermissions(
-                        inicioSesion.this,
-                        new String[]
-                                {
-                                        Manifest.permission.ACCESS_COARSE_LOCATION
-                                },
-                        100);
-                return;
-            }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, inicioSesion.this);
-
-        } catch (Exception e)
-        {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location)
-    {
-        try
-        {
-            contgps++;
-            if (contgps <= 1)
-            {
-                Geocoder geocoder = new Geocoder(inicioSesion.this, Locale.getDefault());
-                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                String address = addressList.get(0).getAddressLine(0);
-                gps = address;
-                iniciar_sesion();
-                locationManager.removeUpdates(inicioSesion.this);
-            }
-        } catch (Exception e)
-        {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //METODO PERRON :V, CHECAR METODO ESTA COMENTADO
     public void login(View view)
-    {
-        Toast.makeText(this, "ubicando dispositivo", Toast.LENGTH_SHORT).show();
-        getLocation();
-        // iniciar_sesion();
-    }
-
-    public void iniciar_sesion()
     {
         CONTADOR_BTN_LOGIN[0]++;
         if (CONTADOR_BTN_LOGIN[0] <= 1)
@@ -443,6 +340,16 @@ public class inicioSesion extends AppCompatActivity implements LocationListener
                                                     String temp = db.getKey();
                                                     if (o[0].getCorreo().equals(user.getText().toString()))
                                                     {
+                                                        String gps = "Desconocida";
+                                                        AdminSQLiteOpenHelper admin;
+                                                        SQLiteDatabase bdd;
+                                                        admin = new AdminSQLiteOpenHelper(getApplicationContext(), "datos_gps", null, 1);
+                                                        bdd = admin.getWritableDatabase();
+                                                        Cursor fila = bdd.rawQuery("select ubicacion from datos_gps", null);
+                                                        if (fila.moveToFirst())
+                                                        {
+                                                            gps = fila.getString(0);
+                                                        }
                                                         Map<String, Object> map = new HashMap<>();
                                                         map.put("ult_login", gps);
                                                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
