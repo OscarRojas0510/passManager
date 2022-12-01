@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -207,4 +208,30 @@ public class Modificar extends AppCompatActivity
             Toast.makeText(this, "faltan datos", Toast.LENGTH_LONG).show();
         }
     }
-}
+
+    public void EliminarPass(View view)
+    {
+
+        mDataBase = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> map = new HashMap<>();
+        map.put("cuenta", cuenta.getText().toString());
+        if (!user.getText().toString().isEmpty())
+        {
+            map.put("user", user.getText().toString());
+        }
+
+
+        Task<Void> voidTask = mDataBase.child("usuarios").child(key).child("passwords").child(keypw).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getApplicationContext(), "Borrado", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), PantallaInicio.class);
+                i.putExtra("key", key);
+                startActivity(i);
+                finish();
+            }
+        });
+    }
+
+
+    }
